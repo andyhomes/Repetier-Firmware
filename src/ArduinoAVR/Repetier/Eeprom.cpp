@@ -451,7 +451,6 @@ void EEPROM::storeDataIntoEEPROM(uint8_t corrupted)
 }
 void EEPROM::initalizeUncached()
 {
-    HAL::eprSetFloat(EPR_Z_PROBE_HEIGHT,Z_PROBE_HEIGHT);
     HAL::eprSetFloat(EPR_Z_PROBE_SPEED,Z_PROBE_SPEED);
     HAL::eprSetFloat(EPR_Z_PROBE_XY_SPEED,Z_PROBE_XY_SPEED);
     HAL::eprSetFloat(EPR_Z_PROBE_X_OFFSET,Z_PROBE_X_OFFSET);
@@ -639,11 +638,11 @@ void EEPROM::readDataFromEEPROM(bool includeExtruder)
         Com::printInfoFLN(Com::tEPRProtocolChanged);
         if(version < 3)
         {
-            HAL::eprSetFloat(EPR_Z_PROBE_HEIGHT,Z_PROBE_HEIGHT);
             HAL::eprSetFloat(EPR_Z_PROBE_SPEED,Z_PROBE_SPEED);
             HAL::eprSetFloat(EPR_Z_PROBE_XY_SPEED,Z_PROBE_XY_SPEED);
             HAL::eprSetFloat(EPR_Z_PROBE_X_OFFSET,Z_PROBE_X_OFFSET);
             HAL::eprSetFloat(EPR_Z_PROBE_Y_OFFSET,Z_PROBE_Y_OFFSET);
+            HAL::eprSetFloat(EPR_Z_PROBE_Z_OFFSET,Z_PROBE_Z_OFFSET);
             HAL::eprSetFloat(EPR_Z_PROBE_X1,Z_PROBE_X1);
             HAL::eprSetFloat(EPR_Z_PROBE_Y1,Z_PROBE_Y1);
             HAL::eprSetFloat(EPR_Z_PROBE_X2,Z_PROBE_X2);
@@ -914,9 +913,8 @@ void EEPROM::writeSettings()
 #endif
 #endif
 #endif
-    writeFloat(EPR_Z_PROBE_Z_OFFSET, Com::tZProbeOffsetZ);
 #if FEATURE_Z_PROBE
-    writeFloat(EPR_Z_PROBE_HEIGHT, Com::tZProbeHeight);
+    writeFloat(EPR_Z_PROBE_Z_OFFSET,Com::tZProbeOffsetZ);
     writeFloat(EPR_Z_PROBE_BED_DISTANCE, Com::tZProbeBedDitance);
     writeFloat(EPR_Z_PROBE_SPEED, Com::tZProbeSpeed);
     writeFloat(EPR_Z_PROBE_XY_SPEED, Com::tZProbeSpeedXY);

@@ -219,6 +219,11 @@ inline void memcopy4(void *dest,void *source) {
 #define ZHOME_Y_POS IGNORE_COORDINATE
 #endif
 
+#if FEATURE_DELTA_AUTO_CALIBRATION
+#include "Calibration.h"
+#endif
+
+
 // MS1 MS2 Stepper Driver Microstepping mode table
 #define MICROSTEP1 LOW,LOW
 #define MICROSTEP2 HIGH,LOW
@@ -248,11 +253,11 @@ inline void memcopy4(void *dest,void *source) {
 #define Z2_MINMAX_PIN -1
 #endif
 
-#define SPEED_MIN_MILLIS 400
-#define SPEED_MAX_MILLIS 60
+#define SPEED_MIN_MILLIS 300
+#define SPEED_MAX_MILLIS 50
 #define SPEED_MAGNIFICATION 100.0f
 
-#define SOFTWARE_LEVELING (defined(FEATURE_SOFTWARE_LEVELING) && (DRIVE_SYSTEM==DELTA))
+#define SOFTWARE_LEVELING ((FEATURE_SOFTWARE_LEVELING>0) && (DRIVE_SYSTEM==DELTA))
 /**  \brief Horizontal distance bridged by the diagonal push rod when the end effector is in the center. It is pretty close to 50% of the push rod length (250 mm).
 */
 #ifndef ROD_RADIUS

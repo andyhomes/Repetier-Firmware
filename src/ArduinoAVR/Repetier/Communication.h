@@ -231,6 +231,7 @@ FSTRINGVAR(tZProbeStartScript)
 FSTRINGVAR(tZProbeEndScript)
 FSTRINGVAR(tHitZProbe)
 FSTRINGVAR(tZProbeAverage)
+FSTRINGVAR(tZProbeCorrection)
 FSTRINGVAR(tZProbeZReset)
 FSTRINGVAR(tZProbeBedDitance)
 #endif
@@ -249,11 +250,10 @@ FSTRINGVAR(tWait)
 #if EEPROM_MODE==0
 FSTRINGVAR(tNoEEPROMSupport)
 #else
-FSTRINGVAR(tZProbeOffsetZ)
 #if FEATURE_Z_PROBE
-FSTRINGVAR(tZProbeHeight)
 FSTRINGVAR(tZProbeOffsetX)
 FSTRINGVAR(tZProbeOffsetY)
+FSTRINGVAR(tZProbeOffsetZ)
 FSTRINGVAR(tZProbeSpeed)
 FSTRINGVAR(tZProbeSpeedXY)
 FSTRINGVAR(tZProbeX1)

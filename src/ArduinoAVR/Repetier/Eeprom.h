@@ -76,7 +76,7 @@ have problems with other modules using the eeprom */
 
 #define EPR_Z_PROBE_X_OFFSET      800
 #define EPR_Z_PROBE_Y_OFFSET      804
-#define EPR_Z_PROBE_HEIGHT        808
+#define EPR_Z_PROBE_Z_OFFSET      808
 #define EPR_Z_PROBE_SPEED         812
 #define EPR_Z_PROBE_X1            816
 #define EPR_Z_PROBE_Y1            820
@@ -208,13 +208,6 @@ public:
         return 0;
 #endif
     }
-    static inline float zProbeZOffset() {
-#if EEPROM_MODE != 0
-	    return HAL::eprGetFloat(EPR_Z_PROBE_Z_OFFSET);
-#else
-	    return Z_PROBE_Z_OFFSET;
-#endif
-    }
     static inline float zProbeSpeed() {
 #if EEPROM_MODE != 0
         return HAL::eprGetFloat(EPR_Z_PROBE_SPEED);
@@ -243,11 +236,11 @@ public:
         return Z_PROBE_Y_OFFSET;
 #endif
     }
-    static inline float zProbeHeight() {
+    static inline float zProbeZOffset() {
 #if EEPROM_MODE != 0
-        return HAL::eprGetFloat(EPR_Z_PROBE_HEIGHT);
+        return HAL::eprGetFloat(EPR_Z_PROBE_Z_OFFSET);
 #else
-        return Z_PROBE_HEIGHT;
+        return Z_PROBE_Z_OFFSET;
 #endif
     }
     static inline float zProbeX1() {
@@ -375,6 +368,17 @@ public:
 #endif
     }
 
+#if FEATURE_Z_PROBE
+    static inline void setZProbeZOffset(float mm) {
+#if EEPROM_MODE != 0
+      HAL::eprSetFloat(EPR_Z_PROBE_Z_OFFSET, mm);
+      Com::printFLN(PSTR("Z-Probe Z offset set to: "),mm,3);
+      uint8_t newcheck = computeChecksum();
+      if(newcheck!=HAL::eprGetByte(EPR_INTEGRITY_BYTE))
+          HAL::eprSetByte(EPR_INTEGRITY_BYTE,newcheck);
+#endif
+    }
+#endif
     static inline void setRodRadius(float mm) {
 #if DRIVE_SYSTEM == DELTA
       Printer::radius0=mm;

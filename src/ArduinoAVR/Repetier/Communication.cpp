@@ -236,6 +236,7 @@ FSTRINGVALUE(Com::tDBGMissedSteps,"Missed steps:")
 #if FEATURE_Z_PROBE
 FSTRINGVALUE(Com::tZProbe,"Z-probe:")
 FSTRINGVALUE(Com::tZProbeAverage,"Z-probe average height:")
+FSTRINGVALUE(Com::tZProbeCorrection,"Z-probe correction:")
 FSTRINGVALUE(Com::tZProbeZReset,"Reset Z height")
 FSTRINGVALUE(Com::tZProbeState,"Z-probe state:")
 FSTRINGVALUE(Com::tZProbeStartScript,Z_PROBE_START_SCRIPT)
@@ -256,12 +257,11 @@ FSTRINGVALUE(Com::tWait,WAITING_IDENTIFIER)
 #if EEPROM_MODE == 0
 FSTRINGVALUE(Com::tNoEEPROMSupport,"No EEPROM support compiled.\r\n")
 #else
-FSTRINGVALUE(Com::tZProbeOffsetZ, "Coating thickness [mm]")
 #if FEATURE_Z_PROBE
-FSTRINGVALUE(Com::tZProbeHeight,"Z-probe height [mm]")
 FSTRINGVALUE(Com::tZProbeBedDitance,"Max. z-probe - bed dist. [mm]")
 FSTRINGVALUE(Com::tZProbeOffsetX,"Z-probe offset x [mm]")
 FSTRINGVALUE(Com::tZProbeOffsetY,"Z-probe offset y [mm]")
+FSTRINGVALUE(Com::tZProbeOffsetZ,"Z-probe offset z [mm]")
 FSTRINGVALUE(Com::tZProbeSpeed,"Z-probe speed [mm/s]")
 FSTRINGVALUE(Com::tZProbeSpeedXY,"Z-probe x-y-speed [mm/s]")
 FSTRINGVALUE(Com::tZProbeX1,"Z-probe X1 [mm]")

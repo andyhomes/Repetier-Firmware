@@ -589,13 +589,20 @@ UI_MENU(ui_menu_positions,UI_MENU_POSITIONS,3 + 3 * UI_SPEED + UI_MENU_BACKCNT +
 
 // **** Delta calibration menu
 #if Z_HOME_DIR > 0
+#if FEATURE_Z_PROBE
+UI_MENU_ACTIONCOMMAND_T(ui_menu_set_measured_origin,UI_TEXT_SET_MEASURED_ORIGIN_ID,UI_ACTION_SET_MEASURED_ORIGIN)
+UI_MENU_ACTIONCOMMAND_T(ui_menu_measure_probe_zoff,UI_TEXT_MEAS_ZP_ZOFFSET_ID,UI_ACTION_MEASURE_ZPROBE_ZOFF)
+#define UI_MENU_DELTA {UI_MENU_ADDCONDBACK &ui_menu_home_all UI_SPEED_Z_NOTEST,&ui_menu_set_measured_origin,&ui_menu_measure_probe_zoff}
+UI_MENU(ui_menu_delta,UI_MENU_DELTA,3 + UI_SPEED + UI_MENU_BACKCNT)
+#else
 UI_MENU_ACTIONCOMMAND_T(ui_menu_set_measured_origin,UI_TEXT_SET_MEASURED_ORIGIN_ID,UI_ACTION_SET_MEASURED_ORIGIN)
 #define UI_MENU_DELTA {UI_MENU_ADDCONDBACK &ui_menu_home_all UI_SPEED_Z_NOTEST,&ui_menu_set_measured_origin}
 UI_MENU(ui_menu_delta,UI_MENU_DELTA,2 + UI_SPEED + UI_MENU_BACKCNT)
 #endif
+#endif
 
 // **** Bed leveling menu
-#ifdef SOFTWARE_LEVELING
+#if SOFTWARE_LEVELING
 UI_MENU_ACTIONCOMMAND_T(ui_menu_set_p1,UI_TEXT_SET_P1_ID,UI_ACTION_SET_P1)
 UI_MENU_ACTIONCOMMAND_T(ui_menu_set_p2,UI_TEXT_SET_P2_ID,UI_ACTION_SET_P2)
 UI_MENU_ACTIONCOMMAND_T(ui_menu_set_p3,UI_TEXT_SET_P3_ID,UI_ACTION_SET_P3)
@@ -1026,7 +1033,7 @@ UI_MENU_ACTION2_T(ui_menu_eeprom_loaded, UI_ACTION_DUMMY, UI_TEXT_EEPROM_LOADEDA
 #define UI_MENU_EEPROM_COND
 #define UI_MENU_EEPROM_CNT 0
 #endif
-#if defined(SOFTWARE_LEVELING) && DRIVE_SYSTEM == DELTA
+#if (SOFTWARE_LEVELING) && DRIVE_SYSTEM == DELTA
 #define UI_MENU_SL_COND ,&ui_menu_conf_level
 #define UI_MENU_SL_CNT 1
 UI_MENU_SUBMENU_T(ui_menu_conf_level, UI_TEXT_LEVEL_ID, ui_menu_level)

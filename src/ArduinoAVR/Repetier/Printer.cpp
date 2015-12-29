@@ -1762,6 +1762,7 @@ float Printer::runZMaxProbe()
 #endif
 
 #if FEATURE_Z_PROBE
+/** This function returns z height when z-probe hits the bed at given point */
 float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript)
 {
     float oldOffX = Printer::offsetX;
@@ -1771,10 +1772,12 @@ float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript
     {
         if(runStartScript)
             GCode::executeFString(Com::tZProbeStartScript);
-        float maxStartHeight = EEPROM::zProbeBedDistance() + EEPROM::zProbeHeight() + 0.1;
-        if(currentPosition[Z_AXIS] > maxStartHeight) {
-            moveTo(IGNORE_COORDINATE, IGNORE_COORDINATE, maxStartHeight, IGNORE_COORDINATE, homingFeedrate[Z_AXIS]);
-        }
+        // not sure about this extra move because of possible wrong value of EEPROM::zProbeZOffset()
+        // It's better to adjust safe position with start script
+//        float maxStartHeight = EEPROM::zProbeBedDistance() - EEPROM::zProbeZOffset() + 0.1;
+//        if(currentPosition[Z_AXIS] > maxStartHeight) {
+//            moveTo(IGNORE_COORDINATE, IGNORE_COORDINATE, maxStartHeight, IGNORE_COORDINATE, homingFeedrate[Z_AXIS]);
+//        }
         Printer::offsetX = -EEPROM::zProbeXOffset();
         Printer::offsetY = -EEPROM::zProbeYOffset();
         Printer::offsetZ = 0; // we correct this with probe height
@@ -1785,7 +1788,7 @@ float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript
     Commands::waitUntilEndOfAllMoves();
     int32_t sum = 0, probeDepth;
     int32_t shortMove = static_cast<int32_t>((float)Z_PROBE_SWITCHING_DISTANCE * axisStepsPerMM[Z_AXIS]); // distance to go up for repeated moves
-    int32_t lastCorrection = currentPositionSteps[Z_AXIS]; // starting position
+    int32_t startingZPosition = currentPositionSteps[Z_AXIS];
 #if NONLINEAR_SYSTEM
     realDeltaPositionSteps[Z_AXIS] = currentDeltaPositionSteps[Z_AXIS]; // update real
 #endif
@@ -1827,30 +1830,32 @@ float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript
                 r--;
             }
         }*/
-        sum += lastCorrection - currentPositionSteps[Z_AXIS];
-        if(r + 1 < repeat) // go only shortes possible move up for repetitions
-            PrintLine::moveRelativeDistanceInSteps(0, 0, shortMove, 0, EEPROM::zProbeSpeed(), true, false);
+//        sum += lastCorrection - currentPositionSteps[Z_AXIS];
+		sum += currentPositionSteps[Z_AXIS];
+        if(r < repeat - 1) // go only shortes possible move up for repetitions
+            PrintLine::moveRelativeDistanceInSteps(0, 0, shortMove, 0, EEPROM::zProbeSpeed() * 10, true, false);
     }
-    float distance = static_cast<float>(sum) * invAxisStepsPerMM[Z_AXIS] / static_cast<float>(repeat) + EEPROM::zProbeHeight();
-#if Z_PROBE_Z_OFFSET_MODE == 1
-    distance += EEPROM::zProbeZOffset(); // We measued including coating, so we need to add coating thickness!
-#endif
-#if DISTORTION_CORRECTION
-    float zCorr = distortion.correct(currentPositionSteps[X_AXIS] + EEPROM::zProbeXOffset() * axisStepsPerMM[X_AXIS],currentPositionSteps[Y_AXIS]
-                                     + EEPROM::zProbeYOffset() * axisStepsPerMM[Y_AXIS],0) * invAxisStepsPerMM[Z_AXIS];
-    distance += zCorr;
-#endif
-    distance += bendingCorrectionAt(currentPosition[X_AXIS] + EEPROM::zProbeXOffset(), currentPosition[Y_AXIS] + EEPROM::zProbeYOffset());
-    Com::printF(Com::tZProbe, distance);
-    Com::printF(Com::tSpaceXColon, realXPosition());
-#if DISTORTION_CORRECTION
-    Com::printF(Com::tSpaceYColon, realYPosition());
-    Com::printFLN(PSTR(" zCorr:"), zCorr);
-#else
-    Com::printFLN(Com::tSpaceYColon, realYPosition());
-#endif
+	float distance = static_cast<float>(sum) * invAxisStepsPerMM[Z_AXIS] / static_cast<float>(repeat);
+//#if Z_PROBE_Z_OFFSET_MODE == 1
+//    distance += EEPROM::zProbeZOffset(); // We measued including coating, so we need to add coating thickness!
+//#endif
+//#if DISTORTION_CORRECTION
+//    // TODO review calculations, not sure that correction must be performed here
+//    float zCorr = distortion.correct(currentPositionSteps[X_AXIS] + EEPROM::zProbeXOffset() * axisStepsPerMM[X_AXIS],currentPositionSteps[Y_AXIS]
+//                                     + EEPROM::zProbeYOffset() * axisStepsPerMM[Y_AXIS],0) * invAxisStepsPerMM[Z_AXIS];
+//    distance += zCorr;
+//#endif
+//    distance += bendingCorrectionAt(currentPosition[X_AXIS] + EEPROM::zProbeXOffset(), currentPosition[Y_AXIS] + EEPROM::zProbeYOffset());
+//    Com::printF(Com::tZProbe, distance);
+//    Com::printF(Com::tSpaceXColon, realXPosition());
+//#if DISTORTION_CORRECTION
+//    Com::printF(Com::tSpaceYColon, realYPosition());
+//    Com::printFLN(PSTR(" zCorr:"), zCorr);
+//#else
+//    Com::printFLN(Com::tSpaceYColon, realYPosition());
+//#endif
     // Go back to start position
-    PrintLine::moveRelativeDistanceInSteps(0, 0, lastCorrection - currentPositionSteps[Z_AXIS], 0, EEPROM::zProbeSpeed(), true, false);
+    PrintLine::moveRelativeDistanceInSteps(0, 0, startingZPosition - currentPositionSteps[Z_AXIS], 0, EEPROM::zProbeSpeed(), true, false);
     //PrintLine::moveRelativeDistanceInSteps(offx,offy,0,0,EEPROM::zProbeXYSpeed(),true,true);
     if(last)
     {
@@ -2252,8 +2257,9 @@ void Distortion::extrapolateCorners()
 
 void Distortion::measure(void)
 {
+	// TODO review the function
     fast8_t ix, iy;
-    float z = EEPROM::zProbeBedDistance() + EEPROM::zProbeHeight();
+    float z = EEPROM::zProbeBedDistance() - EEPROM::zProbeZOffset();
     disable(false);
     //Com::printFLN(PSTR("radiusCorr:"), radiusCorrectionSteps);
     //Com::printFLN(PSTR("steps:"), step);
@@ -2271,11 +2277,11 @@ void Distortion::measure(void)
             //Com::printFLN(PSTR("iy "),(int)iy);
             Printer::moveToReal(mtx, mty, z, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
 #if DISTORTION_EXTRAPOLATE_CORNERS
-            setMatrix(floor(0.5f + Printer::axisStepsPerMM[Z_AXIS] * (z -
+            setMatrix(floor(Printer::axisStepsPerMM[Z_AXIS] * (EEPROM::zProbeZOffset() +
                         Printer::runZProbe(ix == 1 && iy == DISTORTION_CORRECTION_POINTS - 1, ix == DISTORTION_CORRECTION_POINTS - 2 && iy == 0, Z_PROBE_REPETITIONS))),
                       matrixIndex(ix,iy));
 #else
-            setMatrix(floor(0.5f + Printer::axisStepsPerMM[Z_AXIS] * (z -
+            setMatrix(floor(Printer::axisStepsPerMM[Z_AXIS] * (EEPROM::zProbeZOffset() +
                         Printer::runZProbe(ix == 0 && iy == DISTORTION_CORRECTION_POINTS - 1, ix == DISTORTION_CORRECTION_POINTS - 1 && iy == 0, Z_PROBE_REPETITIONS))),
                       matrixIndex(ix,iy));
 #endif
@@ -2308,6 +2314,7 @@ void Distortion::measure(void)
 
 int32_t Distortion::correct(int32_t x, int32_t y, int32_t z) const
 {
+	// TODO review the function
     if (!enabled || z > zEnd || Printer::isZProbingActive()) return 0.0f;
     if(false && z == 0) {
   Com::printF(PSTR("correcting ("), x); Com::printF(PSTR(","), y);

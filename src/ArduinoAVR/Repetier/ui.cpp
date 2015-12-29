@@ -1653,7 +1653,7 @@ void UIDisplay::parse(const char *txt,bool ram)
         case 'z':
 #if EEPROM_MODE != 0 && FEATURE_Z_PROBE
             if(c2 == 'h') { // write z probe height
-                addFloat(EEPROM::zProbeHeight(),3,2);
+                addFloat(EEPROM::zProbeZOffset(),3,2);
                 break;
             }
 #endif
@@ -2521,7 +2521,7 @@ bool UIDisplay::nextPreviousAction(int16_t next, bool allowMoves)
         lastNextAccumul = 1;
     }
     float f = (float)(SPEED_MIN_MILLIS - dt) / (float)(SPEED_MIN_MILLIS - SPEED_MAX_MILLIS);
-    lastNextAccumul = 1.0f + (float)SPEED_MAGNIFICATION * f * f;
+    lastNextAccumul = 1.0f + (float)SPEED_MAGNIFICATION * f * f * f;
 #if UI_DYNAMIC_ENCODER_SPEED
     int16_t dynSp = lastNextAccumul / 16;
     if(dynSp < 1)  dynSp = 1;
@@ -3506,6 +3506,13 @@ int UIDisplay::executeAction(unsigned int action, bool allowMoves)
             Com::printFLN(Com::tTower3, PrintLine::calcZOffset(factors, Printer::deltaCPosXSteps, Printer::deltaCPosYSteps) * Printer::invAxisStepsPerMM[Z_AXIS]);
 #endif
             break;
+        case UI_ACTION_MEASURE_ZPROBE_ZOFF:
+        	float zProbeOffset;
+        	zProbeOffset = -Printer::runZProbe(true, true, Z_PROBE_REPETITIONS, true);
+        	Com::printFLN(Com::tZProbeOffsetZ, zProbeOffset);
+        	EEPROM::setZProbeZOffset(zProbeOffset);
+        	Printer::updateCurrentPosition(true);
+        	break;
         case UI_ACTION_HEATED_BED_DOWN:
 #if HAVE_HEATED_BED
         {

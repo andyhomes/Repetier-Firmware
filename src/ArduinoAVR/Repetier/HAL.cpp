@@ -987,7 +987,9 @@ if(fan2Kickstart == 0)
     {
         counterPeriodical = 0;
         executePeriodical = 1;
+#if FAN_PIN > -1 && FEATURE_FAN_CONTROL
         if(fanKickstart) fanKickstart--;
+#endif
     }
 // read analog values
 #if ANALOG_INPUTS > 0

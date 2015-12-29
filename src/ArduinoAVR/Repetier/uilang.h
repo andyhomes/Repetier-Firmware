@@ -97,7 +97,7 @@
 #define LANGUAGE_TR_ID 10
 
 #define NUM_LANGUAGES_KNOWN 11
-#define NUM_TRANSLATED_WORDS 266
+#define NUM_TRANSLATED_WORDS 267
 
 // For selectable translations we refer to each text by a id which gets
 // defined here. The list starts at 0 and defines the position in the
@@ -371,6 +371,7 @@
 #define UI_TEXT_X_OFFSET_ID 263
 #define UI_TEXT_Y_OFFSET_ID 264
 #define UI_TEXT_Z_OFFSET_ID 265
+#define UI_TEXT_MEAS_ZP_ZOFFSET_ID 266 //		"Meas. Z-pr offset"
 
 // Universal definitions
 
@@ -574,6 +575,7 @@
 #define UI_TEXT_SD_REMOVED_EN       "SD card removed"
 #define UI_TEXT_SD_INSERTED_EN      "SD card inserted"
 #define UI_TEXT_PRINTER_READY_EN    "Printer ready."
+
 // Printtime output gets aggregated like <Days_5gisgits>UI_TEXT_PRINTTIME_DAYS<Hours>UI_TEXT_PRINTTIME_HOURS<Minutes>UI_TEXT_PRINTTIME_MINUTES
 // ___88 days 12:45
 #define UI_TEXT_PRINTTIME_DAYS_EN   " days "
@@ -668,6 +670,7 @@
 #define UI_TEXT_X_OFFSET_EN "Set X offset:%T0mm"
 #define UI_TEXT_Y_OFFSET_EN "Set Y offset:%T1mm"
 #define UI_TEXT_Z_OFFSET_EN "Set Z offset:%T2mm"
+#define UI_TEXT_MEAS_ZP_ZOFFSET_EN "Meas. Z-pr offset"
 
 
 
@@ -961,6 +964,7 @@
 #define UI_TEXT_X_OFFSET_DE "X-Offset:%T0mm"
 #define UI_TEXT_Y_OFFSET_DE "Y-Offset:%T1mm"
 #define UI_TEXT_Z_OFFSET_DE "Z-Offset:%T2mm"
+#define UI_TEXT_MEAS_ZP_ZOFFSET_DE "Meas. Z-pr offset"
 
 
 // Dutch translation
@@ -1253,6 +1257,7 @@
 #define UI_TEXT_X_OFFSET_NL "Set X offset:%T0mm"
 #define UI_TEXT_Y_OFFSET_NL "Set Y offset:%T1mm"
 #define UI_TEXT_Z_OFFSET_NL "Set Z offset:%T2mm"
+#define UI_TEXT_MEAS_ZP_ZOFFSET_NL "Meas. Z-pr offset"
 
 
 // *************** Brazilian portuguese translation ****************
@@ -1547,6 +1552,7 @@
 #define UI_TEXT_X_OFFSET_PT "Set X offset:%T0mm"
 #define UI_TEXT_Y_OFFSET_PT "Set Y offset:%T1mm"
 #define UI_TEXT_Z_OFFSET_PT "Set Z offset:%T2mm"
+#define UI_TEXT_MEAS_ZP_ZOFFSET_PT "Meas. Z-pr offset"
 
 
 // *************** Italian translation ****************
@@ -1839,6 +1845,7 @@
 #define UI_TEXT_X_OFFSET_IT "Set X offset:%T0mm"
 #define UI_TEXT_Y_OFFSET_IT "Set Y offset:%T1mm"
 #define UI_TEXT_Z_OFFSET_IT "Set Z offset:%T2mm"
+#define UI_TEXT_MEAS_ZP_ZOFFSET_IT "Meas. Z-pr offset"
 
 
 // Spanish translation
@@ -2130,6 +2137,7 @@
 #define UI_TEXT_X_OFFSET_ES "Set X offset:%T0mm"
 #define UI_TEXT_Y_OFFSET_ES "Set Y offset:%T1mm"
 #define UI_TEXT_Z_OFFSET_ES "Set Z offset:%T2mm"
+#define UI_TEXT_MEAS_ZP_ZOFFSET_ES "Meas. Z-pr offset"
 
 
 // *************** Swedish translation ****************
@@ -2423,6 +2431,7 @@
 #define UI_TEXT_X_OFFSET_SE "Set X offset:%T0mm"
 #define UI_TEXT_Y_OFFSET_SE "Set Y offset:%T1mm"
 #define UI_TEXT_Z_OFFSET_SE "Set Z offset:%T2mm"
+#define UI_TEXT_MEAS_ZP_ZOFFSET_SE "Meas. Z-pr offset"
 
 
 // *************** French translation ****************
@@ -2716,6 +2725,7 @@
 #define UI_TEXT_X_OFFSET_FR "Set X offset:%T0mm"
 #define UI_TEXT_Y_OFFSET_FR "Set Y offset:%T1mm"
 #define UI_TEXT_Z_OFFSET_FR "Set Z offset:%T2mm"
+#define UI_TEXT_MEAS_ZP_ZOFFSET_FR "Meas. Z-pr offset"
 
 
 // *************** Czech translation ****************
@@ -3009,6 +3019,7 @@
 #define UI_TEXT_X_OFFSET_CZ "Set X offset:%T0mm"
 #define UI_TEXT_Y_OFFSET_CZ "Set Y offset:%T1mm"
 #define UI_TEXT_Z_OFFSET_CZ "Set Z offset:%T2mm"
+#define UI_TEXT_MEAS_ZP_ZOFFSET_CZ "Meas. Z-pr offset"
 
 
 // *************** Polish translation ****************
@@ -3300,6 +3311,7 @@
 #define UI_TEXT_X_OFFSET_PL "Przesun w X : %T0mm"
 #define UI_TEXT_Y_OFFSET_PL "Przesun w Y : %T1mm"
 #define UI_TEXT_Z_OFFSET_PL "Przesun w Z :%T2mm"
+#define UI_TEXT_MEAS_ZP_ZOFFSET_PL "Meas. Z-pr offset"
 
 // Türk
 
@@ -3587,4 +3599,5 @@
 #define UI_TEXT_X_OFFSET_TR "Set X offset:%T0mm"
 #define UI_TEXT_Y_OFFSET_TR "Set Y offset:%T1mm"
 #define UI_TEXT_Z_OFFSET_TR "Set Z offset:%T2mm"
+#define UI_TEXT_MEAS_ZP_ZOFFSET_TR "Meas. Z-pr offset"
 
