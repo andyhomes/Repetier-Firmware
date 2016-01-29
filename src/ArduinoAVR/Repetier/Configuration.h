@@ -892,8 +892,8 @@ on this endstop.
 // If EEPROM is enabled these values will be overidden with the values in the EEPROM
 #define X_MAX_LENGTH 200 //165
 #define Y_MAX_LENGTH 200 //175
-//#define Z_MAX_LENGTH 253.90 // for Rostock u-joints
-#define Z_MAX_LENGTH 228.95 // for marble joints
+#define Z_MAX_LENGTH 237.35 // 253.90 // for Rostock u-joints
+//#define Z_MAX_LENGTH 228.95 // for marble joints
 // Coordinates for the minimum axis. Can also be negative if you want to have the bed start at 0 and the printer can go to the left side
 // of the bed. Maximum coordinate is given by adding the above X_MAX_LENGTH values.
 #define X_MIN_POS 0
@@ -926,8 +926,8 @@ on this endstop.
 #if DRIVE_SYSTEM==DELTA
 /** \brief Delta rod length (mm)
 */
-//#define DELTA_DIAGONAL_ROD 229.25 // mm for rosstok u-joints
-#define DELTA_DIAGONAL_ROD 235.0 // mm for marble joints
+#define DELTA_DIAGONAL_ROD 229.25 // mm for rosstok u-joints
+//#define DELTA_DIAGONAL_ROD 235.0 // mm for marble joints
 
 
 /*  =========== Parameter essential for delta calibration ===================
@@ -1280,7 +1280,7 @@ matches, the stored values are used to overwrite the settings.
 IMPORTANT: With mode <>0 some changes in Configuration.h are not set any more, as they are
            taken from the EEPROM.
 */
-#define EEPROM_MODE 21
+#define EEPROM_MODE 22
 
 
 /**************** duplicate motor driver ***************
@@ -1371,7 +1371,7 @@ to recalibrate z.
 #define Z_PROBE_ON_HIGH 1
 #define Z_PROBE_X_OFFSET 0.0
 #define Z_PROBE_Y_OFFSET 0.0
-#define Z_PROBE_Z_OFFSET -17.225 // -17.542
+#define Z_PROBE_Z_OFFSET -16.825 //-17.225 // -17.542
 #define Z_PROBE_BED_DISTANCE 5.0 // Higher than max bed level distance error in mm
 
 // Waits for a signal to start. Valid signals are probe hit and ok button.
