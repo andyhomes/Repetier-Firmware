@@ -877,9 +877,9 @@ on this endstop.
 
 // When you have several endstops in one circuit you need to disable it after homing by moving a
 // small amount back. This is also the case with H-belt systems.
-#define ENDSTOP_X_BACK_ON_HOME 5
-#define ENDSTOP_Y_BACK_ON_HOME 5
-#define ENDSTOP_Z_BACK_ON_HOME 5
+#define ENDSTOP_X_BACK_ON_HOME 10
+#define ENDSTOP_Y_BACK_ON_HOME 10
+#define ENDSTOP_Z_BACK_ON_HOME 10
 
 // You can disable endstop checking for print moves. This is needed, if you get sometimes
 // false signals from your endstops. If your endstops don't give false signals, you
@@ -926,7 +926,7 @@ on this endstop.
 #if DRIVE_SYSTEM==DELTA
 /** \brief Delta rod length (mm)
 */
-#define DELTA_DIAGONAL_ROD 229.25 // mm for rosstok u-joints
+#define DELTA_DIAGONAL_ROD 229.5 //229.25 // mm for rosstok u-joints
 //#define DELTA_DIAGONAL_ROD 235.0 // mm for marble joints
 
 
@@ -1280,7 +1280,7 @@ matches, the stored values are used to overwrite the settings.
 IMPORTANT: With mode <>0 some changes in Configuration.h are not set any more, as they are
            taken from the EEPROM.
 */
-#define EEPROM_MODE 22
+#define EEPROM_MODE 23
 
 
 /**************** duplicate motor driver ***************
