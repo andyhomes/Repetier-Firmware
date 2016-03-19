@@ -1856,7 +1856,8 @@ float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript
 //    Com::printFLN(Com::tSpaceYColon, realYPosition());
 //#endif
     // Go back to start position
-    PrintLine::moveRelativeDistanceInSteps(0, 0, startingZPosition - currentPositionSteps[Z_AXIS], 0, EEPROM::zProbeSpeed(), true, false);
+//    PrintLine::moveRelativeDistanceInSteps(0, 0, startingZPosition - currentPositionSteps[Z_AXIS], 0, EEPROM::zProbeSpeed(), true, false);
+    PrintLine::moveRelativeDistanceInSteps(0, 0, 5 * axisStepsPerMM[Z_AXIS], 0, EEPROM::zProbeSpeed(), true, false);
     //PrintLine::moveRelativeDistanceInSteps(offx,offy,0,0,EEPROM::zProbeXYSpeed(),true,true);
     if(last)
     {
