@@ -229,7 +229,7 @@ Overridden if EEPROM activated.*/
 #define EXT0_Y_OFFSET 0
 #define EXT0_Z_OFFSET 0
 // for skeinforge 40 and later, steps to pull the plasic 1 mm inside the extruder, not out.  Overridden if EEPROM activated.
-#define EXT0_STEPS_PER_MM 156.45 //SolidUtopia Extruder //413 //385
+#define EXT0_STEPS_PER_MM 152.63 //SolidUtopia Extruder //413 //385
 // What type of sensor is used?
 // 0 is no thermistor/temperature control
 // 1 is 100k thermistor (Epcos B57560G0107F000 - RepRap-Fab.org and many other)
@@ -269,7 +269,7 @@ Overridden if EEPROM activated.*/
 // length of filament pulled inside the heater. For repsnap or older
 // skeinforge use higher values.
 //  Overridden if EEPROM activated.
-#define EXT0_MAX_FEEDRATE 100 //30
+#define EXT0_MAX_FEEDRATE 150 //30
 // Feedrate from halted extruder in mm/s
 //  Overridden if EEPROM activated.
 #define EXT0_MAX_START_FEEDRATE 10
@@ -306,12 +306,12 @@ A good start is 30 lower then the optimal value. You need to leave room for cool
 */
 #define EXT0_PID_INTEGRAL_DRIVE_MIN 60
 /** P-gain.  Overridden if EEPROM activated. */
-#define EXT0_PID_PGAIN_OR_DEAD_TIME   19.49 //24
+#define EXT0_PID_PGAIN_OR_DEAD_TIME   24.04
 /** I-gain. Overridden if EEPROM activated.
 */
-#define EXT0_PID_I   1.59 //0.88
+#define EXT0_PID_I   2.42 //0.88
 /** Dgain.  Overridden if EEPROM activated.*/
-#define EXT0_PID_D 59.55 //80
+#define EXT0_PID_D 59.52 //80
 // maximum time the heater is can be switched on. Max = 255.  Overridden if EEPROM activated.
 #define EXT0_PID_MAX 255
 /** \brief Faktor for the advance algorithm. 0 disables the algorithm.  Overridden if EEPROM activated.
@@ -709,11 +709,11 @@ A good start is 30 lower then the optimal value. You need to leave room for cool
 */
 #define HEATED_BED_PID_INTEGRAL_DRIVE_MIN 80
 /** P-gain.  Overridden if EEPROM activated. */
-#define HEATED_BED_PID_PGAIN_OR_DEAD_TIME   88.24 //196
+#define HEATED_BED_PID_PGAIN_OR_DEAD_TIME   142.05 //196
 /** I-gain  Overridden if EEPROM activated.*/
-#define HEATED_BED_PID_IGAIN   7.65 //33.02
+#define HEATED_BED_PID_IGAIN   14.78 //33.02
 /** Dgain.  Overridden if EEPROM activated.*/
-#define HEATED_BED_PID_DGAIN 254.64 //290
+#define HEATED_BED_PID_DGAIN 341.25 //290
 // maximum time the heater can be switched on. Max = 255.  Overridden if EEPROM activated.
 #define HEATED_BED_PID_MAX 255
 // Time to see a temp. change when fully heating. Consider that beds at higher temp. need longer to rise and cold
@@ -892,7 +892,7 @@ on this endstop.
 // If EEPROM is enabled these values will be overidden with the values in the EEPROM
 #define X_MAX_LENGTH 200 //165
 #define Y_MAX_LENGTH 200 //175
-#define Z_MAX_LENGTH 237.35 // 253.90 // for Rostock u-joints
+#define Z_MAX_LENGTH 240 // 253.90 // for Rostock u-joints
 //#define Z_MAX_LENGTH 228.95 // for marble joints
 // Coordinates for the minimum axis. Can also be negative if you want to have the bed start at 0 and the printer can go to the left side
 // of the bed. Maximum coordinate is given by adding the above X_MAX_LENGTH values.
@@ -926,8 +926,8 @@ on this endstop.
 #if DRIVE_SYSTEM==DELTA
 /** \brief Delta rod length (mm)
 */
-#define DELTA_DIAGONAL_ROD 229.5 //229.25 // mm for rosstok u-joints
-//#define DELTA_DIAGONAL_ROD 235.0 // mm for marble joints
+//#define DELTA_DIAGONAL_ROD 229.5 //229.25 // mm for rosstok u-joints
+#define DELTA_DIAGONAL_ROD 234.750 // mm for marble joints
 
 
 /*  =========== Parameter essential for delta calibration ===================
@@ -964,7 +964,7 @@ on this endstop.
 #define DELTA_DIAGONAL_CORRECTION_C 0
 
 /** Max. radius (mm) the printer should be able to reach. */
-#define DELTA_MAX_RADIUS 106 //200
+#define DELTA_MAX_RADIUS 110 //200
 
 // Margin (mm) to avoid above tower minimum (xMin xMinsteps)
 // If your printer can put its carriage low enough the rod is horizontal without hitting the floor
@@ -987,7 +987,7 @@ on this endstop.
   measured from the center of the print area to the vertical smooth tower.
   Alternatly set this to the pivot to pivot horizontal rod distance, when head is at (0,0)
 */
-#define PRINTER_RADIUS 118.0 // 120.0 //124
+#define PRINTER_RADIUS 120.0 //124
 
 /** 1 for more precise delta moves. 0 for faster computation.
 Needs a bit more computation time. */
@@ -1280,7 +1280,7 @@ matches, the stored values are used to overwrite the settings.
 IMPORTANT: With mode <>0 some changes in Configuration.h are not set any more, as they are
            taken from the EEPROM.
 */
-#define EEPROM_MODE 23
+#define EEPROM_MODE 24
 
 
 /**************** duplicate motor driver ***************
@@ -1378,20 +1378,20 @@ to recalibrate z.
 // This is needful if you have the probe trigger by hand.
 #define Z_PROBE_WAIT_BEFORE_TEST 0
 /** Speed of z-axis in mm/s when probing */
-#define Z_PROBE_SPEED 5
+#define Z_PROBE_SPEED 25
 #define Z_PROBE_XY_SPEED 200
 #define Z_PROBE_SWITCHING_DISTANCE 5.0 // Distance to safely switch off probe after it was activated
 #define Z_PROBE_REPETITIONS 1 // Repetitions for probing at one point.
 /** Distance between nozzle and bed when probe triggers. */
 //#define Z_PROBE_HEIGHT 39.91
 /** These scripts are run before resp. after the z-probe is done. Add here code to activate/deactivate probe if needed. */
-#define Z_PROBE_START_SCRIPT "G1 Z100 F9000\nM400\nM340 P0 S2100\nG1 Z20"
+#define Z_PROBE_START_SCRIPT "G1 Z100 F9000\nM400\nM340 P0 S2100\nG1 Z30"
 #define Z_PROBE_FINISHED_SCRIPT "G1 Z100 F9000\nM400\nM340 P0 S600"
 
 #define FEATURE_DELTA_AUTO_CALIBRATION ((DRIVE_SYSTEM==DELTA) && FEATURE_Z_PROBE && 1)
 #define DELTA_CALIBRATION_RADIUS 90.0
 #define DELTA_CALIBRATION_PRECISION 0.04
-#define DELTA_CALIBRATION_COMPENSABLE_TILT 0.1 // max tilt value that can be compensated with end-stops' offsets
+#define DELTA_CALIBRATION_COMPENSABLE_TILT 0.01 // max tilt value that can be compensated with end-stops' offsets
 #define DELTA_CALIBRATION_DEFAULT_MAX_ITERATIONS 10
 
 
@@ -1666,12 +1666,12 @@ If you have leveling with bed coating or fixed z min you can use this menu to ad
 */
 #define UI_BED_COATING 0
 // Values used for preheat
-#define UI_SET_PRESET_HEATED_BED_TEMP_PLA 60
-#define UI_SET_PRESET_EXTRUDER_TEMP_PLA   180
+#define UI_SET_PRESET_HEATED_BED_TEMP_PLA 55
+#define UI_SET_PRESET_EXTRUDER_TEMP_PLA   185
 #define UI_SET_PRESET_HEATED_BED_TEMP_ABS 90
 #define UI_SET_PRESET_EXTRUDER_TEMP_ABS   220
 // Extreme values
-#define UI_SET_MIN_HEATED_BED_TEMP  55
+#define UI_SET_MIN_HEATED_BED_TEMP  50
 #define UI_SET_MAX_HEATED_BED_TEMP 110
 #define UI_SET_MIN_EXTRUDER_TEMP   160
 #define UI_SET_MAX_EXTRUDER_TEMP   270
