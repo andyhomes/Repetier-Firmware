@@ -3508,7 +3508,10 @@ int UIDisplay::executeAction(unsigned int action, bool allowMoves)
             break;
         case UI_ACTION_MEASURE_ZPROBE_ZOFF:
         	float zProbeOffset;
-        	zProbeOffset = -Printer::runZProbe(true, true, Z_PROBE_REPETITIONS, true);
+        	zProbeOffset = Printer::runZProbe(true, true, 3, true);
+        	zProbeOffset += Printer::runZProbe(true, true, 3, true);
+        	zProbeOffset += Printer::runZProbe(true, true, 3, true);
+        	zProbeOffset = -zProbeOffset/3;
         	Com::printFLN(Com::tZProbeOffsetZ, zProbeOffset);
         	EEPROM::setZProbeZOffset(zProbeOffset);
         	Printer::updateCurrentPosition(true);
