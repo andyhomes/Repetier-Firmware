@@ -1225,7 +1225,7 @@ void Commands::processGCode(GCode *com)
 		Printer::updateCurrentPosition();
 		GCode::executeFString(Com::tZProbeStartScript);
 		if (!com->hasR() || com->R == 0) {
-			com->R = 50.0f;
+			com->R = 25.0f;
 		}
 		float prX, prY;
 		Printer::moveTo(0.0, 0.0, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
