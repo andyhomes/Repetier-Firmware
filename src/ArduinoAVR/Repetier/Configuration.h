@@ -1390,8 +1390,8 @@ to recalibrate z.
 
 #define FEATURE_DELTA_AUTO_CALIBRATION ((DRIVE_SYSTEM==DELTA) && FEATURE_Z_PROBE && 1)
 #define DELTA_CALIBRATION_RADIUS 90.0
-#define DELTA_CALIBRATION_PRECISION 0.04
-#define DELTA_CALIBRATION_COMPENSABLE_TILT 0.01 // max tilt value that can be compensated with end-stops' offsets
+#define DELTA_CALIBRATION_PRECISION 0.01
+#define DELTA_CALIBRATION_COMPENSABLE_TILT 0.03 // max tilt value that can be compensated with end-stops' offsets
 #define DELTA_CALIBRATION_DEFAULT_MAX_ITERATIONS 10
 
 
