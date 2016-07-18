@@ -220,9 +220,9 @@ Overridden if EEPROM activated.*/
 // Retraction for sd pause over lcd
 #define RETRACT_ON_PAUSE 2
 // These commands get executed after storing position and going to park position.
-#define PAUSE_START_COMMANDS ""
+#define PAUSE_START_COMMANDS "G28"
 // These commands get executed before we go to stored position.
-#define PAUSE_END_COMMANDS ""
+#define PAUSE_END_COMMANDS "G28"
 
 // Extruder offsets in steps not mm!
 #define EXT0_X_OFFSET 0
@@ -1391,7 +1391,7 @@ to recalibrate z.
 #define FEATURE_DELTA_AUTO_CALIBRATION ((DRIVE_SYSTEM==DELTA) && FEATURE_Z_PROBE && 1)
 #define DELTA_CALIBRATION_RADIUS 90.0
 #define DELTA_CALIBRATION_PRECISION 0.01
-#define DELTA_CALIBRATION_COMPENSABLE_TILT 0.03 // max tilt value that can be compensated with end-stops' offsets
+#define DELTA_CALIBRATION_COMPENSABLE_TILT 0.2 // max tilt value that can be compensated with end-stops' offsets
 #define DELTA_CALIBRATION_DEFAULT_MAX_ITERATIONS 10
 
 
