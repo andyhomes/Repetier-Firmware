@@ -220,9 +220,9 @@ Overridden if EEPROM activated.*/
 // Retraction for sd pause over lcd
 #define RETRACT_ON_PAUSE 2
 // These commands get executed after storing position and going to park position.
-#define PAUSE_START_COMMANDS "G28"
+#define PAUSE_START_COMMANDS ""
 // These commands get executed before we go to stored position.
-#define PAUSE_END_COMMANDS "G28"
+#define PAUSE_END_COMMANDS ""
 
 // Extruder offsets in steps not mm!
 #define EXT0_X_OFFSET 0
