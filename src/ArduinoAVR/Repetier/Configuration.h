@@ -1385,13 +1385,13 @@ to recalibrate z.
 /** Distance between nozzle and bed when probe triggers. */
 //#define Z_PROBE_HEIGHT 39.91
 /** These scripts are run before resp. after the z-probe is done. Add here code to activate/deactivate probe if needed. */
-#define Z_PROBE_START_SCRIPT "G1 Z100 F9000\nM400\nM340 P0 S2100\nG1 Z30"
+#define Z_PROBE_START_SCRIPT "G1 Z100 F9000\nM400\nM340 P0 S2250\nG1 Z30"
 #define Z_PROBE_FINISHED_SCRIPT "G1 Z75 F9000\nM400\nM340 P0 S600\nG1 Z150 F9000\nM400\nM340 P0 S0"
 
 #define FEATURE_DELTA_AUTO_CALIBRATION ((DRIVE_SYSTEM==DELTA) && FEATURE_Z_PROBE && 1)
 #define DELTA_CALIBRATION_RADIUS 90.0
 #define DELTA_CALIBRATION_PRECISION 0.01
-#define DELTA_CALIBRATION_COMPENSABLE_TILT 0.2 // max tilt value that can be compensated with end-stops' offsets
+#define DELTA_CALIBRATION_COMPENSABLE_TILT 1.0 // max tilt value that can be compensated with end-stops' offsets
 #define DELTA_CALIBRATION_DEFAULT_MAX_ITERATIONS 10
 
 
