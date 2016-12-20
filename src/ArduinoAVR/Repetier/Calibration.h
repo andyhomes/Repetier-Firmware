@@ -101,4 +101,14 @@ public:
     void run(uint8_t max_iterations);
 };
 
+class ZProbe {
+
+public:
+
+	/**
+	 * Modified version of Printer::runZProbe
+	 */
+	static float runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript);
+};
+
 #endif

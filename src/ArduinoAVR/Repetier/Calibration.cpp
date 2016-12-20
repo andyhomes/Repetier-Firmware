@@ -418,7 +418,7 @@ void AutoCalibration::takeProbes() {
 	Com::println();
 	Com::printFLN(Com1::tTakingProbes);
 	Printer::moveTo(0.0, 0.0, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
-	height_correction = Printer::runZProbe(true, false, 1, false) + EEPROM::zProbeZOffset();
+	height_correction = ZProbe::runZProbe(true, false, 1, false) + EEPROM::zProbeZOffset();
 	uint16_t degrees;
 	float prX, prY;
 	for (uint8_t i = 0; i < 12; i++) {
@@ -427,7 +427,7 @@ void AutoCalibration::takeProbes() {
 		prY = sin(degrees * DEG_TO_RAD) * calibration_radius;
 		Printer::moveTo(prX, prY, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
 		bool is_last_probe = (i == 11);
-		probes[i] = Printer::runZProbe(false, is_last_probe, 1, false) + EEPROM::zProbeZOffset();
+		probes[i] = ZProbe::runZProbe(false, is_last_probe, 1, false) + EEPROM::zProbeZOffset();
 	}
 	writeProbesOut();
 }
@@ -477,6 +477,80 @@ float AutoCalibration::devsq(float arr[], int sz) {
 		dsq += dif * dif;
 	}
 	return dsq;
+}
+
+float ZProbe::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript)
+{
+    float oldOffX = Printer::offsetX;
+    float oldOffY = Printer::offsetY;
+    float oldOffZ = Printer::offsetZ;
+    if(first)
+    {
+        if(runStartScript)
+            GCode::executeFString(Com::tZProbeStartScript);
+        Printer::offsetX = -EEPROM::zProbeXOffset();
+        Printer::offsetY = -EEPROM::zProbeYOffset();
+        Printer::offsetZ = 0; // we correct this with probe height
+        PrintLine::moveRelativeDistanceInSteps((Printer::offsetX - oldOffX) * Printer::axisStepsPerMM[X_AXIS],
+                                               (Printer::offsetY - oldOffY) * Printer::axisStepsPerMM[Y_AXIS],
+                                               0, 0, EEPROM::zProbeXYSpeed(), true, ALWAYS_CHECK_ENDSTOPS);
+    }
+    Commands::waitUntilEndOfAllMoves();
+    int32_t sum = 0, probeDepth;
+    int32_t shortMove = static_cast<int32_t>((float)Z_PROBE_SWITCHING_DISTANCE * Printer::axisStepsPerMM[Z_AXIS]); // distance to go up for repeated moves
+    int32_t startingZPosition = Printer::currentPositionSteps[Z_AXIS];
+#if NONLINEAR_SYSTEM
+    Printer::realDeltaPositionSteps[Z_AXIS] = Printer::currentDeltaPositionSteps[Z_AXIS]; // update real
+#endif
+    //int32_t updateZ = 0;
+    Printer::waitForZProbeStart();
+    for(int8_t r = 0; r < repeat; r++)
+    {
+        probeDepth = 2 * (Printer::zMaxSteps - Printer::zMinSteps); // probe should always hit within this distance
+        Printer::stepsRemainingAtZHit = -1; // Marker that we did not hit z probe
+        //int32_t offx = axisStepsPerMM[X_AXIS] * EEPROM::zProbeXOffset();
+        //int32_t offy = axisStepsPerMM[Y_AXIS] * EEPROM::zProbeYOffset();
+        //PrintLine::moveRelativeDistanceInSteps(-offx,-offy,0,0,EEPROM::zProbeXYSpeed(),true,true);
+        Printer::setZProbingActive(true);
+        PrintLine::moveRelativeDistanceInSteps(0, 0, -probeDepth, 0, EEPROM::zProbeSpeed(), true, true);
+        if(Printer::stepsRemainingAtZHit < 0)
+        {
+            Com::printErrorFLN(Com::tZProbeFailed);
+            return -1;
+        }
+        Printer::setZProbingActive(false);
+#if NONLINEAR_SYSTEM
+        Printer::stepsRemainingAtZHit = Printer::realDeltaPositionSteps[C_TOWER] - Printer::currentDeltaPositionSteps[C_TOWER]; // nonlinear moves may split z so stepsRemainingAtZHit is only what is left from last segment not total move. This corrects the problem.
+#endif
+#if DRIVE_SYSTEM == DELTA
+        Printer::currentDeltaPositionSteps[A_TOWER] += Printer::stepsRemainingAtZHit; // Update difference
+        Printer::currentDeltaPositionSteps[B_TOWER] += Printer::stepsRemainingAtZHit;
+        Printer::currentDeltaPositionSteps[C_TOWER] += Printer::stepsRemainingAtZHit;
+#endif
+        Printer::currentPositionSteps[Z_AXIS] += Printer::stepsRemainingAtZHit; // now current position is correct
+		sum += Printer::currentPositionSteps[Z_AXIS];
+        if(r < repeat - 1) // go only shortes possible move up for repetitions
+            PrintLine::moveRelativeDistanceInSteps(0, 0, shortMove, 0, EEPROM::zProbeSpeed() * 10, true, false);
+    }
+	float distance = static_cast<float>(sum) * Printer::invAxisStepsPerMM[Z_AXIS] / static_cast<float>(repeat);
+    PrintLine::moveRelativeDistanceInSteps(0, 0, 5 * Printer::axisStepsPerMM[Z_AXIS], 0, EEPROM::zProbeSpeed(), true, false);
+    if(last)
+    {
+        oldOffX = Printer::offsetX;
+        oldOffY = Printer::offsetY;
+        oldOffZ = Printer::offsetZ;
+        GCode::executeFString(Com::tZProbeEndScript);
+        if(Extruder::current)
+        {
+            Printer::offsetX = -Extruder::current->xOffset * Printer::invAxisStepsPerMM[X_AXIS];
+            Printer::offsetY = -Extruder::current->yOffset * Printer::invAxisStepsPerMM[Y_AXIS];
+            Printer::offsetZ = -Extruder::current->zOffset * Printer::invAxisStepsPerMM[Z_AXIS];
+        }
+        PrintLine::moveRelativeDistanceInSteps((Printer::offsetX - oldOffX) * Printer::axisStepsPerMM[X_AXIS],
+                                               (Printer::offsetY - oldOffY) * Printer::axisStepsPerMM[Y_AXIS],
+                                               (Printer::offsetZ - oldOffZ) * Printer::axisStepsPerMM[Z_AXIS], 0, EEPROM::zProbeXYSpeed(), true, ALWAYS_CHECK_ENDSTOPS);
+    }
+    return distance;
 }
 
 #endif

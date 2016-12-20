@@ -1229,19 +1229,19 @@ void Commands::processGCode(GCode *com)
 		}
 		float prX, prY;
 		Printer::moveTo(0.0, 0.0, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
-		float h_correction = Printer::runZProbe(true, false, Z_PROBE_REPETITIONS, false);
+		float h_correction = ZProbe::runZProbe(true, false, Z_PROBE_REPETITIONS, false);
 		prX = cos(90 * DEG_TO_RAD) * com->R;
 		prY = sin(90 * DEG_TO_RAD) * com->R;
 		Printer::moveTo(prX, prY, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
-		h_correction += Printer::runZProbe(false, false, Z_PROBE_REPETITIONS, false);
+		h_correction += ZProbe::runZProbe(false, false, Z_PROBE_REPETITIONS, false);
 		prX = cos(210 * DEG_TO_RAD) * com->R;
 		prY = sin(210 * DEG_TO_RAD) * com->R;
 		Printer::moveTo(prX, prY, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
-		h_correction += Printer::runZProbe(false, false, Z_PROBE_REPETITIONS, false);
+		h_correction += ZProbe::runZProbe(false, false, Z_PROBE_REPETITIONS, false);
 		prX = cos(330 * DEG_TO_RAD) * com->R;
 		prY = sin(330 * DEG_TO_RAD) * com->R;
 		Printer::moveTo(prX, prY, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
-		h_correction += Printer::runZProbe(false, true, Z_PROBE_REPETITIONS, false);
+		h_correction += ZProbe::runZProbe(false, true, Z_PROBE_REPETITIONS, false);
 		h_correction /= 4.0;
 		h_correction += EEPROM::zProbeZOffset();
         Printer::updateCurrentPosition();
@@ -1256,8 +1256,8 @@ void Commands::processGCode(GCode *com)
 
 #if FEATURE_DELTA_AUTO_CALIBRATION
     case 39:
-    	// G39 	 [Rn.n] [In] [S0..2]	- runs auto-calibration
-    	// G39 P [Rn.n]				- only takes probes
+    	// G39 	 [Rn.n] [In]	- runs auto-calibration
+    	// G39 P [Rn.n]			- only takes probes
 
     	// where:
     	// R - float, optional, calibration radius. Default - DELTA_CALIBRATION_RADIUS
