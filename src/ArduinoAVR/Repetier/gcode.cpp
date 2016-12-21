@@ -847,6 +847,14 @@ bool GCode::parseAscii(char *line,bool fromSerial)
             params |= 4096; // Needs V2 for saving
             break;
         }
+        case 'A':
+        case 'a':
+        {
+            A = parseFloatValue(pos);
+            params2 |= 64;
+            params |= 4096; // Needs V2 for saving
+            break;
+        }
         case '*' : //checksum
         {
             uint8_t checksum_given = parseLongValue(pos);

@@ -96,9 +96,9 @@ public:
 	/**
      * Takes 13 probes: 1 - center and 12 - around on DELTA_CALIBRATION_RADIUS
      */
-    void takeProbes();
+    void takeProbes(uint8_t rounds = 1);
 
-    void run(uint8_t max_iterations);
+    void run(uint8_t max_iterations, uint8_t probe_rounds = 1);
 };
 
 class ZProbe {

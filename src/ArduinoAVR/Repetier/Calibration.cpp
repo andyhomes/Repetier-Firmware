@@ -40,7 +40,7 @@ AutoCalibration::AutoCalibration(float radius) {
 	flatness_corrected = tilt_correceted = errors_corrected = false;
 }
 
-void AutoCalibration::run(uint8_t max_iterations) {
+void AutoCalibration::run(uint8_t max_iterations, uint8_t probe_rounds) {
 	Com::printFLN(Com1::tAutocalibrationStarted);
     bool oldAutolevel = Printer::isAutolevelActive();
     Printer::setAutolevelActive(false);
@@ -65,7 +65,7 @@ void AutoCalibration::run(uint8_t max_iterations) {
 		Com::printF(Com1::tIteration, iteration);
 		Com::printFLN(Com1::tOf, max_iterations);
 
-		takeProbes();
+		takeProbes(probe_rounds);
 		if (getDeviation() <= DELTA_CALIBRATION_PRECISION) {
 			if (iteration == 1) {
 				Com::printFLN(Com1::tNoCalibrationNeeded);
@@ -411,23 +411,35 @@ void AutoCalibration::prepareForNextIteration() {
 	tilt_correceted = flatness_corrected = false;
 }
 
-void AutoCalibration::takeProbes() {
+void AutoCalibration::takeProbes(uint8_t rounds) {
+	if (rounds < 1) {
+		rounds = 1;
+	}
 	Printer::homeAxis(true, true, true);
 	Printer::updateCurrentPosition();
 	GCode::executeFString(Com::tZProbeStartScript);
 	Com::println();
 	Com::printFLN(Com1::tTakingProbes);
-	Printer::moveTo(0.0, 0.0, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
-	height_correction = ZProbe::runZProbe(true, false, 1, false) + EEPROM::zProbeZOffset();
-	uint16_t degrees;
-	float prX, prY;
-	for (uint8_t i = 0; i < 12; i++) {
-		degrees = i * 30;
-		prX = cos(degrees * DEG_TO_RAD) * calibration_radius;
-		prY = sin(degrees * DEG_TO_RAD) * calibration_radius;
-		Printer::moveTo(prX, prY, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
-		bool is_last_probe = (i == 11);
-		probes[i] = ZProbe::runZProbe(false, is_last_probe, 1, false) + EEPROM::zProbeZOffset();
+	for (uint8_t r = 1; r <= rounds; r++) {
+		Printer::moveTo(0.0, 0.0, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
+		bool is_first_probe = (r == 1);
+		height_correction += ZProbe::runZProbe(is_first_probe, false, 1, false) + EEPROM::zProbeZOffset();
+		uint16_t degrees;
+		float prX, prY;
+		for (uint8_t i = 0; i < 12; i++) {
+			degrees = i * 30;
+			prX = cos(degrees * DEG_TO_RAD) * calibration_radius;
+			prY = sin(degrees * DEG_TO_RAD) * calibration_radius;
+			Printer::moveTo(prX, prY, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
+			bool is_last_probe = (i == 11 && r == rounds);
+			probes[i] = ZProbe::runZProbe(false, is_last_probe, 1, false) + EEPROM::zProbeZOffset();
+		}
+	}
+	if (rounds > 1) {
+		height_correction /= rounds;
+		for (uint8_t i = 0; i < 12; i++) {
+			probes[i] /= rounds;
+		}
 	}
 	writeProbesOut();
 }

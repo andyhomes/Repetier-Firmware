@@ -1256,19 +1256,20 @@ void Commands::processGCode(GCode *com)
 
 #if FEATURE_DELTA_AUTO_CALIBRATION
     case 39:
-    	// G39 	 [Rn.n] [In]	- runs auto-calibration
-    	// G39 P [Rn.n]			- only takes probes
+    	// G39 	 [Rn.n] [In] [An]	- runs auto-calibration
+    	// G39 P [Rn.n] [An]		- only takes probes
 
     	// where:
     	// R - float, optional, calibration radius. Default - DELTA_CALIBRATION_RADIUS
     	// I - optional, max number of iterations. Default - DELTA_CALIBRATION_DEFAULT_MAX_ITERATIONS
+    	// A - optional, number of pounds of taking probes. Default - 1.
     {
 		AutoCalibration autoCalibration = AutoCalibration(com->hasR() ? com->R : DELTA_CALIBRATION_RADIUS);
 		if (com->hasP()) {
-			autoCalibration.takeProbes();
+			autoCalibration.takeProbes(com->hasA() ? com->A : 1);
 		} else {
 			uint8_t maxIterations = com->hasI() ? (uint8_t) com->I : DELTA_CALIBRATION_DEFAULT_MAX_ITERATIONS;
-			autoCalibration.run(maxIterations);
+			autoCalibration.run(maxIterations, com->hasA() ? com->A : 1);
 		}
     }
     break;
