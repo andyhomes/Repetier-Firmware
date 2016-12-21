@@ -313,7 +313,7 @@ void AutoCalibration::correctDeltaGeometry() {
 
 void AutoCalibration::eliminateFlatnessError() {
 	printer_flatness_error = average(probes, 12);
-	if (printer_flatness_error < DELTA_CALIBRATION_PRECISION) {
+	if (abs(printer_flatness_error) < DELTA_CALIBRATION_PRECISION) {
 		printer_flatness_error = 0.0;
 	} else {
 		for (int i = 0; i < 12; i++) {
