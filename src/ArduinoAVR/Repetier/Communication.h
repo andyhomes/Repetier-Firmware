@@ -233,6 +233,7 @@ FSTRINGVAR(tZProbeStartScript)
 FSTRINGVAR(tZProbeEndScript)
 FSTRINGVAR(tHitZProbe)
 FSTRINGVAR(tZProbeAverage)
+FSTRINGVAR(tZProbeCorrection)
 FSTRINGVAR(tZProbeZReset)
 FSTRINGVAR(tZProbeBedDitance)
 #endif

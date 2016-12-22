@@ -248,6 +248,7 @@ FSTRINGVALUE(Com::tDBGMissedSteps,"Missed steps:")
 #if FEATURE_Z_PROBE
 FSTRINGVALUE(Com::tZProbe,"Z-probe:")
 FSTRINGVALUE(Com::tZProbeAverage,"Z-probe average height:")
+FSTRINGVALUE(Com::tZProbeCorrection,"Z-probe correction:")
 FSTRINGVALUE(Com::tZProbeZReset,"Reset Z height")
 FSTRINGVALUE(Com::tZProbeState,"Z-probe state:")
 FSTRINGVALUE(Com::tZProbeStartScript,Z_PROBE_START_SCRIPT)

@@ -3704,6 +3704,16 @@ int UIDisplay::executeAction(unsigned int action, bool allowMoves)
             Com::printFLN(Com::tTower3, PrintLine::calcZOffset(factors, Printer::deltaCPosXSteps, Printer::deltaCPosYSteps) * Printer::invAxisStepsPerMM[Z_AXIS]);
 #endif
             break;
+        case UI_ACTION_MEASURE_ZPROBE_ZOFF:
+        	float zProbeOffset;
+        	zProbeOffset = ZProbe::runZProbe(true, true, 3, true);
+        	zProbeOffset += ZProbe::runZProbe(true, true, 3, true);
+        	zProbeOffset += ZProbe::runZProbe(true, true, 3, true);
+        	zProbeOffset = -zProbeOffset/3;
+        	Com::printFLN(Com::tZProbeOffsetZ, zProbeOffset);
+        	EEPROM::setZProbeHeight(zProbeOffset);
+        	Printer::updateCurrentPosition(true);
+        	break;
         case UI_ACTION_HEATED_BED_DOWN:
 #if HAVE_HEATED_BED
         {

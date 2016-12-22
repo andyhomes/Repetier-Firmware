@@ -1,5 +1,4 @@
 /*
-    This file is part of Repetier-Firmware.
 
     Repetier-Firmware is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -131,7 +130,7 @@ is a full cartesian system where x, y and z moves are handled by separate motors
 Cases 1, 2, 8 and 9 cover all needed xy and xz H gantry systems. If you get results mirrored etc. you can swap motor connections for x and y.
 If a motor turns in the wrong direction change INVERT_X_DIR or INVERT_Y_DIR.
 */
-#define DRIVE_SYSTEM 0
+#define DRIVE_SYSTEM 3
 
 /* You can write some GCODE to be executed on startup. Use this e.g. to set some 
 pins. Separate multiple GCODEs with \n
@@ -1432,6 +1431,14 @@ to recalibrate z.
 /** Minimum extruder temperature for probing. If it is lower, it will be increased to that value. */
 #define Z_PROBE_MIN_TEMPERATURE 150
 
+#define FEATURE_DELTA_AUTO_CALIBRATION ((DRIVE_SYSTEM==DELTA) && FEATURE_Z_PROBE && 1)
+#define DELTA_CALIBRATION_RADIUS 90.0
+/** Must be greater than 0. Zero value causes infinite loop and other issues.*/
+#define DELTA_CALIBRATION_PRECISION 0.01
+/** Max tilt value that can be compensated with end-stops' offsets */
+#define DELTA_CALIBRATION_COMPENSABLE_TILT 1.0
+#define DELTA_CALIBRATION_DEFAULT_MAX_ITERATIONS 5
+
 /*
 Define how we measure the bed rotation. 
 All methods need at least 3 points to define the bed rotation correctly. The quality we get comes
@@ -1668,7 +1675,7 @@ The following settings override uiconfig.h!
 24 or CONTROLLER_ZONESTAR = Zonestar P802M with LCD 20x4 and 5 ADC button keypad
 */
 
-#define FEATURE_CONTROLLER NO_CONTROLLER
+#define FEATURE_CONTROLLER CONTROLLER_REPRAPDISCOUNT_GLCD
 
 /* You can have one keypad connected via single analog pin as seen on
  some printers with Melzi V2.0 board, 20x4 LCD and 5 buttons keypad. This must be

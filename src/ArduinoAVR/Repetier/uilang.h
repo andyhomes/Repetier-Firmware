@@ -98,7 +98,7 @@
 #define LANGUAGE_FI_ID 11
 
 #define NUM_LANGUAGES_KNOWN 12
-#define NUM_TRANSLATED_WORDS 270
+#define NUM_TRANSLATED_WORDS 271
 
 // For selectable translations we refer to each text by a id which gets
 // defined here. The list starts at 0 and defines the position in the
@@ -376,6 +376,7 @@
 #define UI_TEXT_LAYER_ID 267
 #define UI_TEXT_PROGRESS_ID 268
 #define UI_TEXT_PRINTNAME_ID 269
+#define UI_TEXT_MEAS_ZP_ZOFFSET_ID 270 //		"Meas. Z-pr offset"
 // Universal definitions
 
 #define UI_TEXT_SEL              cSEL
@@ -676,7 +677,7 @@
 #define UI_TEXT_LAYER_EN "Layer %Pl/%PL"
 #define UI_TEXT_PROGRESS_EN "%Pp%%%"
 #define UI_TEXT_PRINTNAME_EN "%Pn"
-
+#define UI_TEXT_MEAS_ZP_ZOFFSET_EN "Meas. Z-pr offset"
 
 
 // *************** German translation ****************
@@ -973,7 +974,7 @@
 #define UI_TEXT_LAYER_DE "Layer %Pl/%PL"
 #define UI_TEXT_PROGRESS_DE "%Pp%%%"
 #define UI_TEXT_PRINTNAME_DE "%Pn"
-
+#define UI_TEXT_MEAS_ZP_ZOFFSET_DE "Meas. Z-pr offset"
 
 // Dutch translation
 
@@ -1269,7 +1270,7 @@
 #define UI_TEXT_LAYER_NL "Laag %Pl/%PL"
 #define UI_TEXT_PROGRESS_NL "%Pp%%%"
 #define UI_TEXT_PRINTNAME_NL "%Pn"
-
+#define UI_TEXT_MEAS_ZP_ZOFFSET_LN "Meas. Z-pr offset"
 
 // *************** Brazilian portuguese translation ****************
 
@@ -1567,7 +1568,7 @@
 #define UI_TEXT_LAYER_PT "Camada %Pl/%PL"
 #define UI_TEXT_PROGRESS_PT "%Pp%%%"
 #define UI_TEXT_PRINTNAME_PT "%Pn"
-
+#define UI_TEXT_MEAS_ZP_ZOFFSET_PT "Meas. Z-pr offset"
 
 // *************** Italian translation ****************
 
@@ -1863,7 +1864,7 @@
 #define UI_TEXT_LAYER_IT "Layer %Pl/%PL"
 #define UI_TEXT_PROGRESS_IT "%Pp%%%"
 #define UI_TEXT_PRINTNAME_IT "%Pn"
-
+#define UI_TEXT_MEAS_ZP_ZOFFSET_IT "Meas. Z-pr offset"
 
 // Spanish translation
 
@@ -2158,7 +2159,7 @@
 #define UI_TEXT_LAYER_ES "Capa %Pl/%PL"
 #define UI_TEXT_PROGRESS_ES "%Pp%%%"
 #define UI_TEXT_PRINTNAME_ES "%Pn"
-
+#define UI_TEXT_MEAS_ZP_ZOFFSET_ES "Meas. Z-pr offset"
 
 // *************** Swedish translation ****************
 // By Daniel Tedenljung 2013-08-21
@@ -2455,7 +2456,7 @@
 #define UI_TEXT_LAYER_SE "Lager %Pl/%PL"
 #define UI_TEXT_PROGRESS_SE "%Pp%%%"
 #define UI_TEXT_PRINTNAME_SE "%Pn"
-
+#define UI_TEXT_MEAS_ZP_ZOFFSET_SE "Meas. Z-pr offset"
 
 // *************** French translation ****************
 // ***************      By Doudou     ****************
@@ -2752,7 +2753,7 @@
 #define UI_TEXT_LAYER_FR "Couche %Pl/%PL"
 #define UI_TEXT_PROGRESS_FR "%Pp%%%"
 #define UI_TEXT_PRINTNAME_FR "%Pn"
-
+#define UI_TEXT_MEAS_ZP_ZOFFSET_FR "Meas. Z-pr offset"
 
 // *************** Czech translation ****************
 // ***************      By Majkl     ****************
@@ -3049,7 +3050,7 @@
 #define UI_TEXT_LAYER_CZ "Vrstva %Pl/%PL"
 #define UI_TEXT_PROGRESS_CZ "%Pp%%%"
 #define UI_TEXT_PRINTNAME_CZ "%Pn"
-
+#define UI_TEXT_MEAS_ZP_ZOFFSET_CZ "Meas. Z-pr offset"
 
 // *************** Polish translation ****************
 // ***************       By MIS       ****************
@@ -3344,7 +3345,7 @@
 #define UI_TEXT_LAYER_PL "Warstwa %Pl/%PL"
 #define UI_TEXT_PROGRESS_PL "%Pp%%%"
 #define UI_TEXT_PRINTNAME_PL "%Pn"
-
+#define UI_TEXT_MEAS_ZP_ZOFFSET_PL "Meas. Z-pr offset"
 // Türk
 
 #define UI_TEXT_ON_TR               "Acik"
@@ -3635,7 +3636,7 @@
 #define UI_TEXT_LAYER_TR "Katman %Pl/%PL"
 #define UI_TEXT_PROGRESS_TR "%Pp%%%"
 #define UI_TEXT_PRINTNAME_TR "%Pn"
-
+#define UI_TEXT_MEAS_ZP_ZOFFSET_TR "Meas. Z-pr offset"
 // *************** Finnish translation ****************
 // ********** By Matti Granstedt 28.01.2016 ***********
 
@@ -3929,3 +3930,4 @@
 #define UI_TEXT_LAYER_FI "Kerros %Pl/%PL"
 #define UI_TEXT_PROGRESS_FI "%Pp%%%"
 #define UI_TEXT_PRINTNAME_FI "%Pn"
+#define UI_TEXT_MEAS_ZP_ZOFFSET_FI "Meas. Z-pr offset"

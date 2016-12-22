@@ -1171,6 +1171,66 @@ void Commands::processGCode(GCode *com) {
             break;
 #endif
 #endif
+
+#if FEATURE_Z_PROBE
+    case 38: // G38 [R]		- correct height
+    {
+		// force homing
+		Printer::homeAxis(true, true, true);
+		Printer::updateCurrentPosition();
+		GCode::executeFString(Com::tZProbeStartScript);
+		if (!com->hasR() || com->R == 0) {
+			com->R = 25.0f;
+		}
+		float prX, prY;
+		Printer::moveTo(0.0, 0.0, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
+		float h_correction = ZProbe::runZProbe(true, false, Z_PROBE_REPETITIONS, false);
+		prX = cos(90 * DEG_TO_RAD) * com->R;
+		prY = sin(90 * DEG_TO_RAD) * com->R;
+		Printer::moveTo(prX, prY, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
+		h_correction += ZProbe::runZProbe(false, false, Z_PROBE_REPETITIONS, false);
+		prX = cos(210 * DEG_TO_RAD) * com->R;
+		prY = sin(210 * DEG_TO_RAD) * com->R;
+		Printer::moveTo(prX, prY, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
+		h_correction += ZProbe::runZProbe(false, false, Z_PROBE_REPETITIONS, false);
+		prX = cos(330 * DEG_TO_RAD) * com->R;
+		prY = sin(330 * DEG_TO_RAD) * com->R;
+		Printer::moveTo(prX, prY, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
+		h_correction += ZProbe::runZProbe(false, true, Z_PROBE_REPETITIONS, false);
+		h_correction /= 4.0;
+		h_correction += EEPROM::zProbeZOffset();
+        Printer::updateCurrentPosition();
+        Printer::zLength -= h_correction;
+        Printer::updateDerivedParameter();
+        Com::printFLN(Com::tZProbeCorrection, -h_correction, 2);
+        Com::printFLN(Com::tZProbePrinterHeight, Printer::zLength, 2);
+        Printer::homeAxis(true,true,true);
+    }
+    break;
+#endif
+
+#if FEATURE_DELTA_AUTO_CALIBRATION
+    case 39:
+    	// G39 	 [Rn.n] [In] [An]	- runs auto-calibration
+    	// G39 P [Rn.n] [An]		- only takes probes
+
+    	// where:
+    	// R - float, optional, calibration radius. Default - DELTA_CALIBRATION_RADIUS
+    	// I - optional, max number of iterations. Default - DELTA_CALIBRATION_DEFAULT_MAX_ITERATIONS
+    	// A - optional, number of pounds of taking probes. Default - 1.
+    {
+		AutoCalibration autoCalibration = AutoCalibration(com->hasR() ? com->R : DELTA_CALIBRATION_RADIUS);
+		if (com->hasP()) {
+			autoCalibration.takeProbes(com->hasA() ? com->A : 1);
+		} else {
+			uint8_t maxIterations = com->hasI() ? (uint8_t) com->I : DELTA_CALIBRATION_DEFAULT_MAX_ITERATIONS;
+			autoCalibration.run(maxIterations, com->hasA() ? com->A : 1);
+		}
+    }
+    break;
+#endif
+
+
         case 90: // G90
             Printer::relativeCoordinateMode = false;
             if(com->internalCommand)
