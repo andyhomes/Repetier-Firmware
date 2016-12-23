@@ -250,7 +250,18 @@ void AutoCalibration::correctFlatnes() {
 		// Positive value of getPrinterFlatnessError() means printer radius must be bigger
 		Com::printFLN(Com1::tCorrectingRadius);
 		Com::printFloat(Printer::radius0, 3);
-		Printer::radius0 += printer_flatness_error * 1.618; // * 1.618 - faster approach
+		float correction = printer_flatness_error * 1.618; // * 1.618 - faster approach
+
+		// limit correction to prevent significant changes when probing works incorrect.
+		// huge changes may cause probe to go outside bed
+		if (abs(correction) > 0.25) {
+			if (correction > 0) {
+				correction = 0.25;
+			} else {
+				correction = -0.25;
+			}
+		}
+		Printer::radius0 += correction;
 		Com::printFLN(Com1::tTo, Printer::radius0, 3);
 		HAL::eprSetFloat(EPR_DELTA_HORIZONTAL_RADIUS, Printer::radius0);
 		EEPROM::updateChecksum();
