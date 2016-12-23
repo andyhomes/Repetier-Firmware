@@ -40,6 +40,10 @@ AutoCalibration::AutoCalibration(float radius) {
 	flatness_corrected = tilt_correceted = errors_corrected = false;
 }
 
+/**
+ * Runs autocalibration process with given number of iterations.
+ * If 'rounds' is greater than 1 it makes given number of rounds of taking probes resulting in average values in each iteration.
+ */
 void AutoCalibration::run(uint8_t max_iterations, uint8_t probe_rounds) {
 	Com::printFLN(Com1::tAutocalibrationStarted);
     bool oldAutolevel = Printer::isAutolevelActive();
@@ -346,6 +350,9 @@ void AutoCalibration::findTilt(int ang1, int ang2, int angStep, float val1, floa
 	}
 }
 
+/**
+ * Tries to find bed tilt and remove it from probes results
+ */
 void AutoCalibration::eliminateBedTilt() {
 	if (!tilt_correceted) {
 		tilt_value = .0;
@@ -411,6 +418,10 @@ void AutoCalibration::prepareForNextIteration() {
 	tilt_correceted = flatness_corrected = false;
 }
 
+/**
+ * Takes 13 probes: 1 - center and 12 - around on DELTA_CALIBRATION_RADIUS.
+ * If 'rounds' is greater than 1 it makes given number of rounds of taking probes resulting in average values.
+ */
 void AutoCalibration::takeProbes(uint8_t rounds) {
 	if (rounds < 1) {
 		rounds = 1;
@@ -491,6 +502,12 @@ float AutoCalibration::devsq(float arr[], int sz) {
 	return dsq;
 }
 
+/**
+ * Modified version of Printer::runZProbe.
+ *
+ * Method returns value that means 'Where nozzle would be on z-axis if it goes to position Z0 at current X and Y coordinates?'.
+ * Negative values mean nozzle would hit bed.
+ */
 float ZProbe::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript)
 {
     float oldOffX = Printer::offsetX;
@@ -511,18 +528,14 @@ float ZProbe::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript)
     int32_t sum = 0, probeDepth;
     int32_t shortMove = static_cast<int32_t>((float)Z_PROBE_SWITCHING_DISTANCE * Printer::axisStepsPerMM[Z_AXIS]); // distance to go up for repeated moves
     int32_t startingZPosition = Printer::currentPositionSteps[Z_AXIS];
-#if NONLINEAR_SYSTEM
+
     Printer::realDeltaPositionSteps[Z_AXIS] = Printer::currentNonlinearPositionSteps[Z_AXIS]; // update real
-#endif
-    //int32_t updateZ = 0;
+
     Printer::waitForZProbeStart();
     for(int8_t r = 0; r < repeat; r++)
     {
         probeDepth = 2 * (Printer::zMaxSteps - Printer::zMinSteps); // probe should always hit within this distance
         Printer::stepsRemainingAtZHit = -1; // Marker that we did not hit z probe
-        //int32_t offx = axisStepsPerMM[X_AXIS] * EEPROM::zProbeXOffset();
-        //int32_t offy = axisStepsPerMM[Y_AXIS] * EEPROM::zProbeYOffset();
-        //PrintLine::moveRelativeDistanceInSteps(-offx,-offy,0,0,EEPROM::zProbeXYSpeed(),true,true);
         Printer::setZProbingActive(true);
         PrintLine::moveRelativeDistanceInSteps(0, 0, -probeDepth, 0, EEPROM::zProbeSpeed(), true, true);
         if(Printer::stepsRemainingAtZHit < 0)
@@ -531,14 +544,13 @@ float ZProbe::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript)
             return -1;
         }
         Printer::setZProbingActive(false);
-#if NONLINEAR_SYSTEM
+
         Printer::stepsRemainingAtZHit = Printer::realDeltaPositionSteps[C_TOWER] - Printer::currentNonlinearPositionSteps[C_TOWER]; // nonlinear moves may split z so stepsRemainingAtZHit is only what is left from last segment not total move. This corrects the problem.
-#endif
-#if DRIVE_SYSTEM == DELTA
+
         Printer::currentNonlinearPositionSteps[A_TOWER] += Printer::stepsRemainingAtZHit; // Update difference
         Printer::currentNonlinearPositionSteps[B_TOWER] += Printer::stepsRemainingAtZHit;
         Printer::currentNonlinearPositionSteps[C_TOWER] += Printer::stepsRemainingAtZHit;
-#endif
+
         Printer::currentPositionSteps[Z_AXIS] += Printer::stepsRemainingAtZHit; // now current position is correct
 		sum += Printer::currentPositionSteps[Z_AXIS];
         if(r < repeat - 1) // go only shortes possible move up for repetitions

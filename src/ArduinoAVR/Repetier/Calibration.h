@@ -64,14 +64,8 @@ private:
 
 	void eliminateHeightError();
 
-	/*
-	 *
-	 */
 	void eliminateFlatnessError();
 
-	/**
-	 * Tries to find bed tilt and remove it from probes results
-	 */
 	void eliminateBedTilt();
 
 	void findTilt(int ang1, int ang2, int angStep, float val1, float val2, float valStep, float &ref_devsq);
@@ -93,21 +87,15 @@ private:
 public:
 	AutoCalibration(float calibration_radius);
 
-	/**
-     * Takes 13 probes: 1 - center and 12 - around on DELTA_CALIBRATION_RADIUS
-     */
     void takeProbes(uint8_t rounds = 1);
 
-    void run(uint8_t max_iterations, uint8_t probe_rounds = 1);
+	void run(uint8_t max_iterations, uint8_t probe_rounds = 1);
 };
+
 
 class ZProbe {
 
 public:
-
-	/**
-	 * Modified version of Printer::runZProbe
-	 */
 	static float runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript);
 };
 
