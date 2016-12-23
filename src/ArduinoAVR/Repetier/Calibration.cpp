@@ -596,7 +596,7 @@ void ZProbe::correctHeight(float radius) {
 
 	float prX, prY;
 	Printer::moveTo(0.0, 0.0, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
-	float h_correction = ZProbe::runZProbe(true, false, Z_PROBE_REPETITIONS, false);
+	float h_correction = ZProbe::runZProbe(true, (radius == 0.0), Z_PROBE_REPETITIONS, false);
 	if (radius != 0.0) {
 		prX = cos(90 * DEG_TO_RAD) * radius;
 		prY = sin(90 * DEG_TO_RAD) * radius;
