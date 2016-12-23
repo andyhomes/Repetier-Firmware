@@ -3710,7 +3710,7 @@ int UIDisplay::executeAction(unsigned int action, bool allowMoves)
         	zProbeOffset += ZProbe::runZProbe(true, true, 3, true);
         	zProbeOffset += ZProbe::runZProbe(true, true, 3, true);
         	zProbeOffset = -zProbeOffset/3;
-        	Com::printFLN(Com::tZProbeOffsetZ, zProbeOffset);
+        	Com::printFLN(Com::tZProbeHeight, zProbeOffset);
         	EEPROM::setZProbeHeight(zProbeOffset);
         	Printer::updateCurrentPosition(true);
         	break;
