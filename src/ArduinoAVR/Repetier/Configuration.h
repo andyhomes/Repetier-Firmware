@@ -1392,6 +1392,7 @@ for a bed coating. Since you can change coatings the value is stored in
 EEPROM if enabled, so you can switch between different coatings without needing
 to recalibrate z.
 */
+// It would be better to give it another name and let use this name instead of Z_PROBE_HEIGHT (see below).
 #define Z_PROBE_Z_OFFSET 0 // offset to coating form real bed level
 /* How is z min measured
  0 = trigger is height of real bed neglecting coating
@@ -1401,6 +1402,7 @@ to recalibrate z.
  That way the real bed is always the reference height. For inductive sensors
  or z min endstops the coating has no effect on the result, so you should use mode 0.
 */
+// Again, this is not about probe offset, but bed/coating offset.
 #define Z_PROBE_Z_OFFSET_MODE 0
 
 #define FEATURE_Z_PROBE 1
@@ -1422,7 +1424,9 @@ to recalibrate z.
 #define Z_PROBE_SWITCHING_DISTANCE 1.5 // Distance to safely switch off probe after it was activated
 #define Z_PROBE_REPETITIONS 5 // Repetitions for probing at one point.
 /** Distance between nozzle and bed when probe triggers. */
-#define Z_PROBE_HEIGHT 39.91
+// This would be better called Z_PROBE_Z_OFFSET by analogy and with the same meaning as Z_PROBE_X_OFFSET and Z_PROBE_Y_OFFSET
+// If sensor being deployed is under the nozzle then value is negative. Otherwise, e.g. probe is the nozzle itself some small positive values expected.
+#define Z_PROBE_HEIGHT -39.91
 /** These scripts are run before resp. after the z-probe is done. Add here code to activate/deactivate probe if needed. */
 #define Z_PROBE_START_SCRIPT ""
 #define Z_PROBE_FINISHED_SCRIPT ""
@@ -1431,6 +1435,7 @@ to recalibrate z.
 /** Minimum extruder temperature for probing. If it is lower, it will be increased to that value. */
 #define Z_PROBE_MIN_TEMPERATURE 150
 
+/** This enables autocalibration functionality for DELTA machines. Z-probe is required. */
 #define FEATURE_DELTA_AUTO_CALIBRATION ((DRIVE_SYSTEM==DELTA) && FEATURE_Z_PROBE && 1)
 #define DELTA_CALIBRATION_RADIUS 90.0
 /** Must be greater than 0. Zero value causes infinite loop and other issues.*/
