@@ -96,7 +96,10 @@ public:
 class ZProbe {
 
 public:
+
 	static float runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript);
+
+	static void correctHeight(float radius = 0.0);
 };
 
 #endif

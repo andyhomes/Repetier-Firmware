@@ -508,15 +508,14 @@ float AutoCalibration::devsq(float arr[], int sz) {
  * Method returns value that means 'Where nozzle would be on z-axis if it goes to position Z0 at current X and Y coordinates?'.
  * Negative values mean nozzle would hit bed.
  */
-float ZProbe::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript)
-{
+float ZProbe::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript) {
     float oldOffX = Printer::offsetX;
     float oldOffY = Printer::offsetY;
     float oldOffZ = Printer::offsetZ;
-    if(first)
-    {
-        if(runStartScript)
+    if(first) {
+        if(runStartScript) {
             GCode::executeFString(Com::tZProbeStartScript);
+        }
         Printer::offsetX = -EEPROM::zProbeXOffset();
         Printer::offsetY = -EEPROM::zProbeYOffset();
         Printer::offsetZ = 0; // we correct this with probe height
@@ -532,19 +531,16 @@ float ZProbe::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript)
     Printer::realDeltaPositionSteps[Z_AXIS] = Printer::currentNonlinearPositionSteps[Z_AXIS]; // update real
 
     Printer::waitForZProbeStart();
-    for(int8_t r = 0; r < repeat; r++)
-    {
+    for(int8_t r = 0; r < repeat; r++) {
         probeDepth = 2 * (Printer::zMaxSteps - Printer::zMinSteps); // probe should always hit within this distance
         Printer::stepsRemainingAtZHit = -1; // Marker that we did not hit z probe
         Printer::setZProbingActive(true);
         PrintLine::moveRelativeDistanceInSteps(0, 0, -probeDepth, 0, EEPROM::zProbeSpeed(), true, true);
-        if(Printer::stepsRemainingAtZHit < 0)
-        {
+        if(Printer::stepsRemainingAtZHit < 0) {
             Com::printErrorFLN(Com::tZProbeFailed);
             return -1;
         }
         Printer::setZProbingActive(false);
-
         Printer::stepsRemainingAtZHit = Printer::realDeltaPositionSteps[C_TOWER] - Printer::currentNonlinearPositionSteps[C_TOWER]; // nonlinear moves may split z so stepsRemainingAtZHit is only what is left from last segment not total move. This corrects the problem.
 
         Printer::currentNonlinearPositionSteps[A_TOWER] += Printer::stepsRemainingAtZHit; // Update difference
@@ -558,14 +554,12 @@ float ZProbe::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript)
     }
 	float distance = static_cast<float>(sum) * Printer::invAxisStepsPerMM[Z_AXIS] / static_cast<float>(repeat);
     PrintLine::moveRelativeDistanceInSteps(0, 0, 5 * Printer::axisStepsPerMM[Z_AXIS], 0, EEPROM::zProbeSpeed(), true, false);
-    if(last)
-    {
+    if(last) {
         oldOffX = Printer::offsetX;
         oldOffY = Printer::offsetY;
         oldOffZ = Printer::offsetZ;
         GCode::executeFString(Com::tZProbeEndScript);
-        if(Extruder::current)
-        {
+        if(Extruder::current) {
             Printer::offsetX = -Extruder::current->xOffset * Printer::invAxisStepsPerMM[X_AXIS];
             Printer::offsetY = -Extruder::current->yOffset * Printer::invAxisStepsPerMM[Y_AXIS];
             Printer::offsetZ = -Extruder::current->zOffset * Printer::invAxisStepsPerMM[Z_AXIS];
@@ -575,6 +569,45 @@ float ZProbe::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript)
                                                (Printer::offsetZ - oldOffZ) * Printer::axisStepsPerMM[Z_AXIS], 0, EEPROM::zProbeXYSpeed(), true, ALWAYS_CHECK_ENDSTOPS);
     }
     return distance;
+}
+
+/**
+ * Corrects printer's height by taking one or four probes.
+ * When radius is 0 - takes only one probe at center.
+ * With given radius it takes 4 probes: one at center and three against each tower on radius distance from center.
+ * Corrects height by average of the probes.
+ */
+void ZProbe::correctHeight(float radius) {
+	// force homing
+	Printer::homeAxis(true, true, true);
+	Printer::updateCurrentPosition();
+	GCode::executeFString(Com::tZProbeStartScript);
+
+	float prX, prY;
+	Printer::moveTo(0.0, 0.0, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
+	float h_correction = ZProbe::runZProbe(true, false, Z_PROBE_REPETITIONS, false);
+	if (radius != 0.0) {
+		prX = cos(90 * DEG_TO_RAD) * radius;
+		prY = sin(90 * DEG_TO_RAD) * radius;
+		Printer::moveTo(prX, prY, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
+		h_correction += ZProbe::runZProbe(false, false, Z_PROBE_REPETITIONS, false);
+		prX = cos(210 * DEG_TO_RAD) * radius;
+		prY = sin(210 * DEG_TO_RAD) * radius;
+		Printer::moveTo(prX, prY, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
+		h_correction += ZProbe::runZProbe(false, false, Z_PROBE_REPETITIONS, false);
+		prX = cos(330 * DEG_TO_RAD) * radius;
+		prY = sin(330 * DEG_TO_RAD) * radius;
+		Printer::moveTo(prX, prY, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
+		h_correction += ZProbe::runZProbe(false, true, Z_PROBE_REPETITIONS, false);
+		h_correction /= 4.0;
+	}
+	h_correction += EEPROM::zProbeHeight();
+    Printer::updateCurrentPosition();
+    Printer::zLength -= h_correction;
+    Printer::updateDerivedParameter();
+    Com::printFLN(Com::tZProbeCorrection, -h_correction, 2);
+    Com::printFLN(Com::tZProbePrinterHeight, Printer::zLength, 2);
+    Printer::homeAxis(true,true,true);
 }
 
 #endif
