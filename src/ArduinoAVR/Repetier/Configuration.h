@@ -1370,7 +1370,7 @@ WARNING: Servos can draw a considerable amount of current. Make sure your system
 #define SERVO2_PIN 5
 #define SERVO3_PIN 4
 /* for set servo(s) at designed neutral position at power-up. Values < 500 mean no start position */
-#define SERVO0_NEUTRAL_POS  600
+#define SERVO0_NEUTRAL_POS  700
 #define SERVO1_NEUTRAL_POS  -1
 #define SERVO2_NEUTRAL_POS  -1
 #define SERVO3_NEUTRAL_POS  -1
@@ -1428,8 +1428,8 @@ to recalibrate z.
 // If sensor being deployed is under the nozzle then value is negative. Otherwise, e.g. probe is the nozzle itself some small positive values expected.
 #define Z_PROBE_HEIGHT -19.06
 /** These scripts are run before resp. after the z-probe is done. Add here code to activate/deactivate probe if needed. */
-#define Z_PROBE_START_SCRIPT "G1 Z100 F9000\nM400\nM340 P0 S2250\nG1 Z30"
-#define Z_PROBE_FINISHED_SCRIPT "G1 Z75 F9000\nM400\nM340 P0 S600\nG1 Z150 F9000\nM400\nM340 P0 S0"
+#define Z_PROBE_START_SCRIPT "G1 Z100 F9000\nM400\nM340 P0 S2050\nG1 Z30"
+#define Z_PROBE_FINISHED_SCRIPT "G1 Z75 F9000\nM400\nM340 P0 S700\nG1 Z150 F9000\nM400\nM340 P0 S0"
 /** Set 1 if you need a hot extruder for good probe results. Normally only required if nozzle is probe. */
 #define Z_PROBE_REQUIRES_HEATING 0
 /** Minimum extruder temperature for probing. If it is lower, it will be increased to that value. */
