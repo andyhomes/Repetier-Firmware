@@ -1564,9 +1564,9 @@ Always hard to say since the other angle is 89° in this case!
 
 
 /** \brief Experimental calibration utility for delta printers
- * Change 1 to 0 to disable
+ * Comment to disable
 */
-#define FEATURE_SOFTWARE_LEVELING 0
+//#define FEATURE_SOFTWARE_LEVELING 0
 
 /* Babystepping allows to change z height during print without changing official z height */
 #define FEATURE_BABYSTEPPING 0
