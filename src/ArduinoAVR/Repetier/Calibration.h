@@ -97,9 +97,11 @@ class ZProbe {
 
 public:
 
-	static float runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript);
+	static float runZProbe(bool first, bool last, uint8_t repeat, bool runStartScript);
 
 	static void correctHeight(float radius = 0.0);
+
+	static void measureZProbeZOffset(uint8_t repeats = 3);
 };
 
 #endif

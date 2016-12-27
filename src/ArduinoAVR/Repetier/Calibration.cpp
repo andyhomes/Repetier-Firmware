@@ -621,4 +621,20 @@ void ZProbe::correctHeight(float radius) {
     Printer::homeAxis(true,true,true);
 }
 
+/**
+ * Having printer's height set properly (i.e. after calibration of Z=0), one can use this procedure to measure Z-probe offset.
+ * It deploys the sensor, takes several probes at center, then updates Z-probe height (i.e. z offset) with average.
+ * The sensor is deployed and undeployed on every probe.
+ */
+void ZProbe::measureZProbeZOffset(uint8_t repeats) {
+	float zProbeOffset = 0.0;
+	for (uint8_t i = 0; i < repeats; i++) {
+		zProbeOffset += runZProbe(true, true, 3, true);
+	}
+	zProbeOffset = -zProbeOffset / repeats;
+	Com::printFLN(Com::tZProbeHeight, zProbeOffset);
+	EEPROM::setZProbeHeight(zProbeOffset);
+	Printer::updateCurrentPosition(true);
+}
+
 #endif

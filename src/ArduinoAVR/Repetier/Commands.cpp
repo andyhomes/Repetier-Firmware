@@ -1177,7 +1177,12 @@ void Commands::processGCode(GCode *com) {
     	// G38 [R]		- correct height
     	// G38 (or G38 R0) - takes one probe at center then corrects height
     	// G38 Rn.m - takes 4 probes: one at center and three against each tower on distance n.m mm from center. Corrects height by average of the probes.
-    	ZProbe::correctHeight(com->hasR() ? com->R : 0);
+    	// G38 S[n] - measures z-probe Z offset. n - number of repetitions (default 3)
+    	if (com->hasS()) {
+    		ZProbe::measureZProbeZOffset(com->S > 0 ? com->S : 3);
+    	} else {
+			ZProbe::correctHeight(com->hasR() ? com->R : 0);
+    	}
     }
     break;
 #endif
