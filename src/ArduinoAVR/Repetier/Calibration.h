@@ -33,6 +33,9 @@ FSTRINGVAR(tTakingProbes)
 FSTRINGVAR(tInspectingForTilt)
 FSTRINGVAR(tFineTilt)
 FSTRINGVAR(tCorrectingOffsets)
+FSTRINGVAR(tBetterResultFound)
+FSTRINGVAR(tSuccess)
+FSTRINGVAR(tStoringBestResults)
 //FSTRINGVAR(t)
 };
 

@@ -31,6 +31,9 @@ FSTRINGVALUE(Com1::tTakingProbes, "Taking probes:")
 FSTRINGVALUE(Com1::tInspectingForTilt, "Inspecting bed surface for tilt...")
 FSTRINGVALUE(Com1::tFineTilt, "Bed tilt is fine: ")
 FSTRINGVALUE(Com1::tCorrectingOffsets, "Correcting towers offsets: ");
+FSTRINGVALUE(Com1::tBetterResultFound,"Found better results (devsq): ")
+FSTRINGVALUE(Com1::tSuccess,"Success!")
+FSTRINGVALUE(Com1::tStoringBestResults,"Storing best results:")
 //FSTRINGVALUE(Com1::t,"")
 
 AutoCalibration::AutoCalibration(float radius) {
@@ -74,7 +77,7 @@ void AutoCalibration::run(uint8_t max_iterations, uint8_t probe_rounds) {
 			if (iteration == 1) {
 				Com::printFLN(Com1::tNoCalibrationNeeded);
 			} else {
-				Com::printF(PSTR("Success!")); // TODO put in Com1
+				Com::printF(Com1::tSuccess);
 			}
 			break;
 		}
@@ -92,7 +95,7 @@ void AutoCalibration::run(uint8_t max_iterations, uint8_t probe_rounds) {
 			best_diag_correction_b = EEPROM::deltaDiagonalCorrectionB();
 			best_diag_correction_c = EEPROM::deltaDiagonalCorrectionC();
 			if (iteration > 1) {
-				Com::printF(PSTR("Found better results (devsq): "), best_devsq, 4); // TODO put in Com1
+				Com::printF(Com1::tBetterResultFound, best_devsq, 4);
 				Com::printFLN(Com1::tTo, devsq_val, 4);
 			}
 			best_devsq = devsq_val;
@@ -135,7 +138,7 @@ void AutoCalibration::run(uint8_t max_iterations, uint8_t probe_rounds) {
     // setting best values and store
     if (iteration > 1) {
 		Com::printFLN(PSTR("---"));
-		Com::printFLN(PSTR("Storing best results:")); // TODO move strings to Com1
+		Com::printFLN(Com1::tStoringBestResults);
     	Printer::radius0 = best_radius;
 		Com::printFLN(PSTR("Printer radius: "), Printer::radius0, 3);
     	HAL::eprSetFloat(EPR_DELTA_HORIZONTAL_RADIUS, Printer::radius0);
