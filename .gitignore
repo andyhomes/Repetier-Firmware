@@ -30,3 +30,10 @@ activate*.bat
 src/Repetier-Atmel7/*
 src/ArduinoDUE/Repetier.zip
 src/ArduinoAVR/Repetier.zip
+
+## sloeber project files
+src/ArduinoAVR/Repetier/Release/
+src/ArduinoAVR/Repetier/.settings/
+src/ArduinoAVR/Repetier/.cproject
+src/ArduinoAVR/Repetier/.ino.cpp
+src/ArduinoAVR/Repetier/.project
