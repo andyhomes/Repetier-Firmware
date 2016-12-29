@@ -1198,10 +1198,10 @@ void Commands::processGCode(GCode *com) {
 
 		AutoCalibration autoCalibration = AutoCalibration(com->hasR() ? com->R : DELTA_CALIBRATION_RADIUS);
 		if (com->hasP()) {
-			autoCalibration.takeProbes(com->hasS() ? com->S : 1);
+			autoCalibration.takeProbes(com->getS(1));
 		} else {
 			uint8_t maxIterations = com->hasI() ? (uint8_t) com->I : DELTA_CALIBRATION_DEFAULT_MAX_ITERATIONS;
-			autoCalibration.run(maxIterations, com->hasS() ? com->S : 1);
+			autoCalibration.run(maxIterations, com->getS(1));
 		}
     }
     break;
