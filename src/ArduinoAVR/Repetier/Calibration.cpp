@@ -448,7 +448,7 @@ void AutoCalibration::takeProbes(uint8_t rounds) {
 	for (uint8_t r = 1; r <= rounds; r++) {
 		Printer::moveTo(0.0, 0.0, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
 		bool is_first_probe = (r == 1);
-		height_correction += ZProbe::runZProbe(is_first_probe, false, 1, false) + EEPROM::zProbeHeight();
+		height_correction += ZProbe::runZProbe(is_first_probe, false, Z_PROBE_REPETITIONS, false) + EEPROM::zProbeHeight();
 		uint16_t degrees;
 		float prX, prY;
 		for (uint8_t i = 0; i < 12; i++) {
@@ -457,7 +457,7 @@ void AutoCalibration::takeProbes(uint8_t rounds) {
 			prY = sin(degrees * DEG_TO_RAD) * calibration_radius;
 			Printer::moveTo(prX, prY, IGNORE_COORDINATE, IGNORE_COORDINATE, EEPROM::zProbeXYSpeed());
 			bool is_last_probe = (i == 11 && r == rounds);
-			probes[i] = ZProbe::runZProbe(false, is_last_probe, 1, false) + EEPROM::zProbeHeight();
+			probes[i] = ZProbe::runZProbe(false, is_last_probe, Z_PROBE_REPETITIONS, false) + EEPROM::zProbeHeight();
 		}
 	}
 	if (rounds > 1) {
@@ -632,7 +632,7 @@ void ZProbe::correctHeight(float radius) {
 void ZProbe::measureZProbeZOffset(uint8_t repeats) {
 	float zProbeOffset = 0.0;
 	for (uint8_t i = 0; i < repeats; i++) {
-		zProbeOffset += runZProbe(true, true, 3, true);
+		zProbeOffset += runZProbe(true, true, Z_PROBE_REPETITIONS, true);
 	}
 	zProbeOffset = -zProbeOffset / repeats;
 	Com::printFLN(Com::tZProbeHeight, zProbeOffset);
