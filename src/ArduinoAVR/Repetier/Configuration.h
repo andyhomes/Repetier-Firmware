@@ -901,9 +901,9 @@ on this endstop.
 
 // For higher precision you can reduce the speed for the second test on the endstop
 // during homing operation. The homing speed is divided by the value. 1 = same speed, 2 = half speed
-#define ENDSTOP_X_RETEST_REDUCTION_FACTOR 5
-#define ENDSTOP_Y_RETEST_REDUCTION_FACTOR 5
-#define ENDSTOP_Z_RETEST_REDUCTION_FACTOR 5
+#define ENDSTOP_X_RETEST_REDUCTION_FACTOR 20
+#define ENDSTOP_Y_RETEST_REDUCTION_FACTOR 20
+#define ENDSTOP_Z_RETEST_REDUCTION_FACTOR 20
 
 // When you have several endstops in one circuit you need to disable it after homing by moving a
 // small amount back. This is also the case with H-belt systems.
@@ -1419,10 +1419,10 @@ to recalibrate z.
 // This is needful if you have the probe trigger by hand.
 #define Z_PROBE_WAIT_BEFORE_TEST 0
 /** Speed of z-axis in mm/s when probing */
-#define Z_PROBE_SPEED 25
+#define Z_PROBE_SPEED 5
 #define Z_PROBE_XY_SPEED 200
 #define Z_PROBE_SWITCHING_DISTANCE 5.0 // Distance to safely switch off probe after it was activated
-#define Z_PROBE_REPETITIONS 5 // Repetitions for probing at one point.
+#define Z_PROBE_REPETITIONS 3 // Repetitions for probing at one point.
 /** Distance between nozzle and bed when probe triggers. */
 // This would be better called Z_PROBE_Z_OFFSET by analogy and with the same meaning as Z_PROBE_X_OFFSET and Z_PROBE_Y_OFFSET
 // If sensor being deployed is under the nozzle then value is negative. Otherwise, e.g. probe is the nozzle itself some small positive values expected.
