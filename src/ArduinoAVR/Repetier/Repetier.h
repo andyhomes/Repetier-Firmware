@@ -644,7 +644,7 @@ public:
         if(a < b) return b;
         return a;
     }
-    static inline int min(int a,int b)
+    static inline int16_t min(int16_t a,int16_t b)
     {
         if(a < b) return a;
         return b;
