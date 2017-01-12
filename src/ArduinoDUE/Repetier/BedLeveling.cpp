@@ -524,7 +524,7 @@ This is the most important function for bed leveling. It does
 
 Now we compute the nozzle height as follows:
 a) Compute average height from repeated measurements
-b) Add zProbeHeight to correct difference between triggering point and nozzle height above bed
+b) Add zProbeHeight to correct difference between triggering point and nozzle height above bed ??? removed, since it "doubling" probe height.
 c) If Z_PROBE_Z_OFFSET_MODE == 1 we add zProbeZOffset() that is coating thickness if we measure below coating with indictive sensor.
 d) Add distortion correction.
 e) Add bending correction
@@ -590,7 +590,7 @@ float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript
         GCode::executeFString(PSTR(Z_PROBE_RUN_AFTER_EVERY_PROBE));
 #endif
     }
-    float distance = static_cast<float>(sum) * invAxisStepsPerMM[Z_AXIS] / static_cast<float>(repeat) + EEPROM::zProbeHeight();
+    float distance = static_cast<float>(sum) * invAxisStepsPerMM[Z_AXIS] / static_cast<float>(repeat);
 	//Com::printFLN(PSTR("OrigDistance:"),distance);
 #if Z_PROBE_Z_OFFSET_MODE == 1
     distance += EEPROM::zProbeZOffset(); // We measured including coating, so we need to add coating thickness!
@@ -627,6 +627,17 @@ float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript
     if(last)
         finishProbing();
     return distance;
+}
+
+/**
+ * Having printer's height set properly (i.e. after calibration of Z=0), one can use this procedure to measure Z-probe height.
+ * It deploys the sensor, takes several probes at center, then updates Z-probe height with average.
+ */
+void Printer::measureZProbeHeight() {
+	float zProbeOffset = Printer::runZProbe(true, true);
+	Com::printFLN(Com::tZProbeHeight, zProbeOffset);
+	EEPROM::setZProbeHeight(zProbeOffset);
+	Printer::updateCurrentPosition(true);
 }
 
 float Printer::bendingCorrectionAt(float x, float y) {
