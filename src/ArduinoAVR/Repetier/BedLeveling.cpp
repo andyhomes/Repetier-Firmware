@@ -634,10 +634,13 @@ float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript
  * It deploys the sensor, takes several probes at center, then updates Z-probe height with average.
  */
 void Printer::measureZProbeHeight() {
-	float zProbeOffset = Printer::runZProbe(true, true);
-	Com::printFLN(Com::tZProbeHeight, zProbeOffset);
-	EEPROM::setZProbeHeight(zProbeOffset);
-	Printer::updateCurrentPosition(true);
+	float zProbeHeight = Printer::runZProbe(true, true);
+#if EEPROM_MODE // Com::tZProbeHeight is not declared when EEPROM_MODE is 0
+	Com::printFLN(Com::tZProbeHeight, zProbeHeight);
+	EEPROM::setZProbeHeight(zProbeHeight);
+#else
+	Com::printFLN(PSTR("Z-probe height [mm]"), zProbeHeight);
+#endif
 }
 
 float Printer::bendingCorrectionAt(float x, float y) {
