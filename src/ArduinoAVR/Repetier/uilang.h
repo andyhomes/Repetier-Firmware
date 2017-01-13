@@ -98,7 +98,7 @@
 #define LANGUAGE_FI_ID 11
 
 #define NUM_LANGUAGES_KNOWN 12
-#define NUM_TRANSLATED_WORDS 289
+#define NUM_TRANSLATED_WORDS 290
 
 // For selectable translations we refer to each text by a id which gets
 // defined here. The list starts at 0 and defines the position in the
@@ -396,6 +396,7 @@
 #define UI_TEXT_CALIBRATION_ERROR_ID 286 // "Calibration Error"
 #define UI_TEXT_AUTOLEVEL_BED_ID 287 // "Autolevel bed"
 #define UI_TEXT_HOMING_ID 288 // "Homing..."
+#define UI_TEXT_MEAS_ZP_HEIGHT_ID 289 //		"Meas. Z-pr height"
 
 // Universal definitions
 
@@ -717,6 +718,7 @@
 #define UI_TEXT_CALIBRATION_ERROR_EN "Calibration Error"
 #define UI_TEXT_AUTOLEVEL_BED_EN "Autolevel bed"
 #define UI_TEXT_HOMING_EN "Homing..."
+#define UI_TEXT_MEAS_ZP_HEIGHT_EN "Meas. Z-pr height"
 
 // *************** German translation ****************
 
@@ -1032,6 +1034,7 @@
 #define UI_TEXT_CALIBRATION_ERROR_DE "Kalibrierungsfehler"
 #define UI_TEXT_AUTOLEVEL_BED_DE "Autolevel Bett"
 #define UI_TEXT_HOMING_DE "Homing..."
+#define UI_TEXT_MEAS_ZP_HEIGHT_DE "Meas. Z-pr height"
 
 // Dutch translation
 
@@ -1345,6 +1348,7 @@
 #define UI_TEXT_CALIBRATION_ERROR_NL "Calibration Error"
 #define UI_TEXT_AUTOLEVEL_BED_NL "Autolevel bed"
 #define UI_TEXT_HOMING_NL "Homing..."
+#define UI_TEXT_MEAS_ZP_HEIGHT_NL "Meas. Z-pr height"
 
 
 // *************** Brazilian portuguese translation ****************
@@ -1661,6 +1665,7 @@
 #define UI_TEXT_CALIBRATION_ERROR_PT "Calibration Error"
 #define UI_TEXT_AUTOLEVEL_BED_PT "Autolevel bed"
 #define UI_TEXT_HOMING_PT "Homing..."
+#define UI_TEXT_MEAS_ZP_HEIGHT_PT "Meas. Z-pr height"
 
 // *************** Italian translation ****************
 
@@ -1974,6 +1979,7 @@
 #define UI_TEXT_CALIBRATION_ERROR_IT "Calibration Error"
 #define UI_TEXT_AUTOLEVEL_BED_IT "Autolevel bed"
 #define UI_TEXT_HOMING_IT "Homing..."
+#define UI_TEXT_MEAS_ZP_HEIGHT_IT "Meas. Z-pr height"
 
 // Spanish translation
 
@@ -2287,6 +2293,7 @@
 #define UI_TEXT_CALIBRATION_ERROR_ES "Calibration Error"
 #define UI_TEXT_AUTOLEVEL_BED_ES "Autolevel bed"
 #define UI_TEXT_HOMING_ES "Homing..."
+#define UI_TEXT_MEAS_ZP_HEIGHT_ES "Meas. Z-pr height"
 
 
 // *************** Swedish translation ****************
@@ -2604,6 +2611,7 @@
 #define UI_TEXT_CALIBRATION_ERROR_SE "Calibration Error"
 #define UI_TEXT_AUTOLEVEL_BED_SE "Autolevel bed"
 #define UI_TEXT_HOMING_SE "Homing..."
+#define UI_TEXT_MEAS_ZP_HEIGHT_SE "Meas. Z-pr height"
 
 
 // *************** French translation ****************
@@ -2919,6 +2927,7 @@
 #define UI_TEXT_CALIBRATION_ERROR_FR "Calibration Error"
 #define UI_TEXT_AUTOLEVEL_BED_FR "Autolevel bed"
 #define UI_TEXT_HOMING_FR "Homing..."
+#define UI_TEXT_MEAS_ZP_HEIGHT_FR "Meas. Z-pr height"
 
 
 // *************** Czech translation ****************
@@ -3236,6 +3245,7 @@
 #define UI_TEXT_CALIBRATION_ERROR_CZ "Calibration Error"
 #define UI_TEXT_AUTOLEVEL_BED_CZ "Autolevel bed"
 #define UI_TEXT_HOMING_CZ "Homing..."
+#define UI_TEXT_MEAS_ZP_HEIGHT_CZ "Meas. Z-pr height"
 
 
 // *************** Polish translation ****************
@@ -3551,6 +3561,7 @@
 #define UI_TEXT_CALIBRATION_ERROR_PL "Calibration Error"
 #define UI_TEXT_AUTOLEVEL_BED_PL "Autolevel bed"
 #define UI_TEXT_HOMING_PL "Homing..."
+#define UI_TEXT_MEAS_ZP_HEIGHT_PL "Meas. Z-pr height"
 
 // Türk
 
@@ -3862,6 +3873,7 @@
 #define UI_TEXT_CALIBRATION_ERROR_TR "Calibration Error"
 #define UI_TEXT_AUTOLEVEL_BED_TR "Autolevel bed"
 #define UI_TEXT_HOMING_TR "Homing..."
+#define UI_TEXT_MEAS_ZP_HEIGHT_TR "Meas. Z-pr height"
 
 // *************** Finnish translation ****************
 // ********** By Matti Granstedt 28.01.2016 ***********
@@ -4176,6 +4188,7 @@
 #define UI_TEXT_CALIBRATION_ERROR_FI "Calibration Error"
 #define UI_TEXT_AUTOLEVEL_BED_FI "Autolevel bed"
 #define UI_TEXT_HOMING_FI "Homing..."
+#define UI_TEXT_MEAS_ZP_HEIGHT_FI "Meas. Z-pr height"
 
 
 #define TRANS(x) UI_STRING(F ## x,x)
