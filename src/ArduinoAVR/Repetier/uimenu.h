@@ -895,8 +895,8 @@ UI_MENU_SUBMENU_T(ui_menu_fan_sub, UI_TEXT_FANSPEED_ID, ui_menu_fan)
 #endif
 
 #if FAN2_PIN > -1 && FEATURE_FAN2_CONTROL
-UI_MENU_CHANGEACTION_FILTER(ui_menu_fan2_fanspeed_printing,"Fan 2 speed:%FS%%%" /* UI_TEXT_ACTION_FANSPEED_ID*/, UI_ACTION_FAN2SPEED,MENU_MODE_PRINTING,0)
-UI_MENU_CHANGEACTION(ui_menu_fan2_fanspeed,"Fan 2 speed:%FS%%%" /* UI_TEXT_ACTION_FANSPEED_ID*/, UI_ACTION_FAN2SPEED)
+UI_MENU_CHANGEACTION_FILTER_T(ui_menu_fan2_fanspeed_printing,UI_TEXT_ACTION_FAN2SPEED_ID, UI_ACTION_FAN2SPEED,MENU_MODE_PRINTING,0)
+UI_MENU_CHANGEACTION_T(ui_menu_fan2_fanspeed,UI_TEXT_ACTION_FAN2SPEED_ID, UI_ACTION_FAN2SPEED)
 #define UI_FAN2SPEED_PRINTING ,&ui_menu_fan2_fanspeed_printing
 #define UI_FAN2SPEED ,&ui_menu_fan2_fanspeed
 #define UI_MENU_FAN2_CNT 1
@@ -1306,7 +1306,7 @@ UI_MENU_SUBMENU_T(ui_menu_preheat,UI_TEXT_PREHEAT_TEMPS_ID,ui_menu_preheat_sub)
 Debug
 Preheat
 Z Calibrate
-Autlevel on/off
+Auto level on/off
 Distortion map
 Distortion on/off
 Ignore M106 Cmd
