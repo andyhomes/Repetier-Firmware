@@ -576,10 +576,10 @@ float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript
         currentNonlinearPositionSteps[Z_AXIS] += stepsRemainingAtZHit;
 #endif
         currentPositionSteps[Z_AXIS] += stepsRemainingAtZHit; // now current position is correct
-        sum += lastCorrection - currentPositionSteps[Z_AXIS];
+        sum += currentPositionSteps[Z_AXIS];
         if(r + 1 < repeat) {
             // go only shortest possible move up for repetitions
-            PrintLine::moveRelativeDistanceInSteps(0, 0, shortMove, 0, EEPROM::zProbeSpeed(), true, false);
+            PrintLine::moveRelativeDistanceInSteps(0, 0, shortMove, 0, HOMING_FEEDRATE_Z, true, true);
             if(Endstops::zProbe()) {
                 Com::printErrorFLN(PSTR("z-probe did not untrigger on repetitive measurement - maybe you need to increase distance!"));
                 UI_MESSAGE(1);
@@ -619,7 +619,7 @@ float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript
     Com::printFLN(Com::tSpaceYColon, realYPosition());
 #endif
     // Go back to start position
-    PrintLine::moveRelativeDistanceInSteps(0, 0, lastCorrection - currentPositionSteps[Z_AXIS], 0, EEPROM::zProbeSpeed(), true, false);
+    PrintLine::moveRelativeDistanceInSteps(0, 0, lastCorrection - currentPositionSteps[Z_AXIS], 0, HOMING_FEEDRATE_Z, true, true);
     if(Endstops::zProbe()) {
         Com::printErrorFLN(PSTR("z-probe did not untrigger after going back to start position."));
         UI_MESSAGE(1);
@@ -636,7 +636,7 @@ float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript
  * It deploys the sensor, takes several probes at center, then updates Z-probe height with average.
  */
 void Printer::measureZProbeHeight() {
-	float zProbeHeight = Printer::runZProbe(true, true);
+	float zProbeHeight = Printer::runZProbe(true, true, Z_PROBE_REPETITIONS, true);
 #if EEPROM_MODE // Com::tZProbeHeight is not declared when EEPROM_MODE is 0
 	Com::printFLN(Com::tZProbeHeight, zProbeHeight);
 	EEPROM::setZProbeHeight(zProbeHeight);
