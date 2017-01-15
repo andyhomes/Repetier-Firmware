@@ -89,6 +89,7 @@ To override EEPROM settings with config settings, set EEPROM_MODE 0
 // SAV MK1                    = 89
 // MJRice Pica Rev B          = 183
 // MJRice Pica Rev C          = 184
+// Zonestar ZRIB 2.1          = 39
 // User layout defined in userpins.h = 999
 
 #define MOTHERBOARD 33
@@ -1090,6 +1091,19 @@ Mega. Used only for nonlinear systems like delta or tuga. */
  * heating to minimum ZHOME_MIN_TEMPERATURE will z home again for correct height.   
  * */
 #define HOMING_ORDER HOME_ORDER_ZXY
+/*
+  Raise Z befor ehoming z axis
+  0 = no
+  1 = if z min is triggered
+  2 = always
+  This is for printers with z probe used as z min. For homing the probe must be
+  at a minimum height for some endstop types, so raising it before will help
+  to make sure this is guaranteed. 
+*/
+#define ZHOME_PRE_RAISE 0
+// Distance in mm to raise if required
+#define ZHOME_PRE_RAISE_DISTANCE 10
+
 // Used for homing order HOME_ORDER_ZXYTZ
 #define ZHOME_MIN_TEMPERATURE 0
 // needs to heat all extruders (1) or only current extruder (0)

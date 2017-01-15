@@ -603,7 +603,9 @@ float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript
         distance += zCorr;
     }
 #endif
+#if SOFTWARE_LEVELING
     distance += bendingCorrectionAt(currentPosition[X_AXIS], currentPosition[Y_AXIS]);
+#endif
     Com::printF(Com::tZProbe, distance);
     Com::printF(Com::tSpaceXColon, realXPosition());
 #if DISTORTION_CORRECTION

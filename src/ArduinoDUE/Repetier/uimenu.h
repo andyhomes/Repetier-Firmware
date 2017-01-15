@@ -709,7 +709,7 @@ UI_MENU(ui_menu_delta, UI_MENU_DELTA, 2 + UI_SPEED + UI_MENU_BACKCNT)
 #endif
 
 // **** Bed leveling menu
-#ifdef SOFTWARE_LEVELING
+#if SOFTWARE_LEVELING
 UI_MENU_ACTIONCOMMAND_T(ui_menu_set_p1, UI_TEXT_SET_P1_ID, UI_ACTION_SET_P1)
 UI_MENU_ACTIONCOMMAND_T(ui_menu_set_p2, UI_TEXT_SET_P2_ID, UI_ACTION_SET_P2)
 UI_MENU_ACTIONCOMMAND_T(ui_menu_set_p3, UI_TEXT_SET_P3_ID, UI_ACTION_SET_P3)
@@ -895,8 +895,8 @@ UI_MENU_SUBMENU_T(ui_menu_fan_sub, UI_TEXT_FANSPEED_ID, ui_menu_fan)
 #endif
 
 #if FAN2_PIN > -1 && FEATURE_FAN2_CONTROL
-UI_MENU_CHANGEACTION_FILTER(ui_menu_fan2_fanspeed_printing,"Fan 2 speed:%FS%%%" /* UI_TEXT_ACTION_FANSPEED_ID*/, UI_ACTION_FAN2SPEED,MENU_MODE_PRINTING,0)
-UI_MENU_CHANGEACTION(ui_menu_fan2_fanspeed,"Fan 2 speed:%FS%%%" /* UI_TEXT_ACTION_FANSPEED_ID*/, UI_ACTION_FAN2SPEED)
+UI_MENU_CHANGEACTION_FILTER_T(ui_menu_fan2_fanspeed_printing,UI_TEXT_ACTION_FAN2SPEED_ID, UI_ACTION_FAN2SPEED,MENU_MODE_PRINTING,0)
+UI_MENU_CHANGEACTION_T(ui_menu_fan2_fanspeed,UI_TEXT_ACTION_FAN2SPEED_ID, UI_ACTION_FAN2SPEED)
 #define UI_FAN2SPEED_PRINTING ,&ui_menu_fan2_fanspeed_printing
 #define UI_FAN2SPEED ,&ui_menu_fan2_fanspeed
 #define UI_MENU_FAN2_CNT 1
@@ -1225,7 +1225,7 @@ UI_MENU_ACTION2_T(ui_menu_eeprom_loaded, UI_ACTION_DUMMY, UI_TEXT_EEPROM_LOADEDA
 #define UI_MENU_EEPROM_COND
 #define UI_MENU_EEPROM_CNT 0
 #endif
-#if defined(SOFTWARE_LEVELING) && DRIVE_SYSTEM == DELTA
+#if SOFTWARE_LEVELING
 #define UI_MENU_SL_COND ,&ui_menu_conf_level
 #define UI_MENU_SL_CNT 1
 UI_MENU_SUBMENU_T(ui_menu_conf_level, UI_TEXT_LEVEL_ID, ui_menu_level)
@@ -1306,7 +1306,7 @@ UI_MENU_SUBMENU_T(ui_menu_preheat,UI_TEXT_PREHEAT_TEMPS_ID,ui_menu_preheat_sub)
 Debug
 Preheat
 Z Calibrate
-Autlevel on/off
+Auto level on/off
 Distortion map
 Distortion on/off
 Ignore M106 Cmd
