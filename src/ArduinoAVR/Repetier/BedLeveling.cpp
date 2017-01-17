@@ -529,7 +529,7 @@ This is the most important function for bed leveling. It does
 
 Now we compute the nozzle height as follows:
 a) Compute average height from repeated measurements
-b) Add zProbeHeight to correct difference between triggering point and nozzle height above bed ??? removed, since it "doubling" probe height.
+b) Add zProbeHeight to correct difference between triggering point and nozzle height above bed
 c) If Z_PROBE_Z_OFFSET_MODE == 1 we add zProbeZOffset() that is coating thickness if we measure below coating with indictive sensor.
 d) Add distortion correction.
 e) Add bending correction
