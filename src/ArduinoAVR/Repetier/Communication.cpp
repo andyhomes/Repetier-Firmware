@@ -256,6 +256,7 @@ FSTRINGVALUE(Com::tDBGMissedSteps,"Missed steps:")
 #if FEATURE_Z_PROBE
 FSTRINGVALUE(Com::tZProbe,"Z-probe:")
 FSTRINGVALUE(Com::tZProbeAverage,"Z-probe average height:")
+FSTRINGVALUE(Com::tZProbeCorrection,"Z-probe correction:")
 FSTRINGVALUE(Com::tZProbeZReset,"Reset Z height")
 FSTRINGVALUE(Com::tZProbeState,"Z-probe state:")
 FSTRINGVALUE(Com::tZProbeStartScript,Z_PROBE_START_SCRIPT)
@@ -403,8 +404,8 @@ FSTRINGVALUE(Com::tEPRDistanceRetractHeating,"distance to retract when heating [
 FSTRINGVALUE(Com::tEPRExtruderCoolerSpeed,"extruder cooler speed [0-255]")
 FSTRINGVALUE(Com::tEPRAdvanceK,"advance K [0=off]")
 FSTRINGVALUE(Com::tEPRAdvanceL,"advance L [0=off]")
-FSTRINGVALUE(Com::tEPRPreheatTemp,"Preheat temp. [°C]")
-FSTRINGVALUE(Com::tEPRPreheatBedTemp,"Bed Preheat temp. [°C]")
+FSTRINGVALUE(Com::tEPRPreheatTemp,"Preheat temp. [ï¿½C]")
+FSTRINGVALUE(Com::tEPRPreheatBedTemp,"Bed Preheat temp. [ï¿½C]")
 
 #endif
 #if SDSUPPORT

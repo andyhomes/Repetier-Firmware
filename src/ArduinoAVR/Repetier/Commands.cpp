@@ -1113,6 +1113,43 @@ void Commands::processGCode(GCode *com) {
             break;
 #endif
 #endif
+
+#if FEATURE_DELTA_AUTO_CALIBRATION
+    case 38: {
+    	// G38 [R]		- correct height
+    	// G38 (or G38 R0) - takes one probe at center then corrects height
+    	// G38 Rn.m - takes 4 probes: one at center and three against each tower on distance n.m mm from center. Corrects height by average of the probes.
+    	// G38 S[n] - measures z-probe Z offset. n - number of repetitions (default 3)
+    	if (com->hasS()) {
+    		ZProbe::measureZProbeZOffset(com->S > 0 ? com->S : 3);
+    	} else {
+			ZProbe::correctHeight(com->hasR() ? com->R : 0);
+    	}
+    }
+    break;
+#endif
+
+#if FEATURE_DELTA_AUTO_CALIBRATION
+    case 39: {
+    	// G39 	 [Rn.n] [In] [Sn]	- runs auto-calibration
+    	// G39 P [Rn.n] [Sn]		- only takes probes
+    	// where:
+    	// R - float, optional, calibration radius. Default - DELTA_CALIBRATION_RADIUS
+    	// I - optional, max number of iterations. Default - DELTA_CALIBRATION_DEFAULT_MAX_ITERATIONS
+    	// S - optional, number of pounds of taking probes. Default - 1.
+
+		AutoCalibration autoCalibration = AutoCalibration(com->hasR() ? com->R : DELTA_CALIBRATION_RADIUS);
+		if (com->hasP()) {
+			autoCalibration.takeProbes(com->getS(1));
+		} else {
+			uint8_t maxIterations = com->hasI() ? (uint8_t) com->I : DELTA_CALIBRATION_DEFAULT_MAX_ITERATIONS;
+			autoCalibration.run(maxIterations, com->getS(1));
+		}
+    }
+    break;
+#endif
+
+
         case 90: // G90
             Printer::relativeCoordinateMode = false;
             if(com->internalCommand)

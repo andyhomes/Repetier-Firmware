@@ -307,6 +307,10 @@ inline void memcopy4(void *dest,void *source) {
 #define ZHOME_Y_POS IGNORE_COORDINATE
 #endif
 
+#if FEATURE_DELTA_AUTO_CALIBRATION
+#include "Calibration.h"
+#endif
+
 // MS1 MS2 Stepper Driver Micro stepping mode table
 #define MICROSTEP1 LOW,LOW
 #define MICROSTEP2 HIGH,LOW
