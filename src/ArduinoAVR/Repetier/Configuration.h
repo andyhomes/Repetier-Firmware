@@ -928,7 +928,7 @@ on this endstop.
 // If EEPROM is enabled these values will be overridden with the values in the EEPROM
 #define X_MAX_LENGTH 200
 #define Y_MAX_LENGTH 200
-#define Z_MAX_LENGTH 240
+#define Z_MAX_LENGTH 260
 // Coordinates for the minimum axis. Can also be negative if you want to have the bed start at 0 and the printer can go to the left side
 // of the bed. Maximum coordinate is given by adding the above X_MAX_LENGTH values.
 #define X_MIN_POS 0
@@ -961,7 +961,7 @@ on this endstop.
 #if DRIVE_SYSTEM==DELTA
 /** \brief Delta rod length (mm)
 */
-#define DELTA_DIAGONAL_ROD 240 // mm
+#define DELTA_DIAGONAL_ROD 234.5 // mm
 
 
 /*  =========== Parameter essential for delta calibration ===================
@@ -1021,7 +1021,7 @@ on this endstop.
   measured from the center of the print area to the vertical smooth tower.
   Alternately set this to the pivot to pivot horizontal rod distance, when head is at (0,0)
 */
-#define PRINTER_RADIUS 125
+#define PRINTER_RADIUS 120
 
 /** 1 for more precise delta moves. 0 for faster computation.
 Needs a bit more computation time. */
@@ -1213,7 +1213,7 @@ Corner can be printed with full speed of 50 mm/s
 Overridden if EEPROM activated.
 */
 #define MAX_JERK 20.0
-#define MAX_ZJERK 20.0
+#define MAX_ZJERK 0.3
 
 /** \brief Number of moves we can cache in advance.
 
@@ -1332,7 +1332,7 @@ matches, the stored values are used to overwrite the settings.
 IMPORTANT: With mode <>0 some changes in Configuration.h are not set any more, as they are
            taken from the EEPROM.
 */
-#define EEPROM_MODE 1
+#define EEPROM_MODE 7
 
 
 /**************** duplicate motor driver ***************
@@ -1441,7 +1441,7 @@ to recalibrate z.
 #define Z_PROBE_SWITCHING_DISTANCE 5.0 // Distance to safely switch off probe after it was activated
 #define Z_PROBE_REPETITIONS 3 // Repetitions for probing at one point.
 /** Distance between nozzle and bed when probe triggers. */
-#define Z_PROBE_HEIGHT 17.45
+#define Z_PROBE_HEIGHT 20.0
 /** These scripts are run before resp. after the z-probe is done. Add here code to activate/deactivate probe if needed. */
 #define Z_PROBE_START_SCRIPT "G1 Z100 F9000\nM400\nM340 P0 S2050\nG1 Z30"
 #define Z_PROBE_FINISHED_SCRIPT "G1 Z75 F9000\nM400\nM340 P0 S700\nG1 Z150 F9000\nM400\nM340 P0 S0"

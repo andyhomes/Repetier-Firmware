@@ -138,8 +138,14 @@ void Commands::printCurrentPosition(FSTRINGPARAM(s)) {
     Com::printF(Com::tSpaceYColon, y * (Printer::unitIsInches ? 0.03937 : 1), 2);
     Com::printF(Com::tSpaceZColon, z * (Printer::unitIsInches ? 0.03937 : 1), 3);
     Com::printFLN(Com::tSpaceEColon, Printer::currentPositionSteps[E_AXIS] * Printer::invAxisStepsPerMM[E_AXIS] * (Printer::unitIsInches ? 0.03937 : 1), 4);
-    //Com::printF(PSTR("OffX:"),Printer::offsetX); // to debug offset handling
-    //Com::printFLN(PSTR(" OffY:"),Printer::offsetY);
+#ifdef DEBUG_POS
+    Com::printF(PSTR("OffX:"),Printer::offsetX); // to debug offset handling
+    Com::printF(PSTR(" OffY:"),Printer::offsetY);
+    Com::printF(PSTR(" XS:"),Printer::currentPositionSteps[X_AXIS]);
+    Com::printF(PSTR(" YS:"),Printer::currentPositionSteps[Y_AXIS]);
+    Com::printFLN(PSTR(" ZS:"),Printer::currentPositionSteps[Z_AXIS]);
+
+#endif    
 }
 
 void Commands::printTemperatures(bool showRaw) {
@@ -1061,9 +1067,9 @@ void Commands::processGCode(GCode *com) {
         case 30: 
 			{ 	// G30 [Pn] [S]
 				// G30 (the same as G30 P3) single probe set Z0
-				// G30 S - measures probe height (P is ignored)
+				// G30 S1 Z<real_z_pos> - measures probe height (P is ignored) assuming we are at real height Z
 				if (com->hasS()) {
-					Printer::measureZProbeHeight();
+					Printer::measureZProbeHeight(com->hasZ() ? com->Z : Printer::currentPosition[Z_AXIS]);
 				} else {
 					uint8_t p = (com->hasP() ? (uint8_t)com->P : 3);
 					if(Printer::runZProbe(p & 1,p & 2) == ILLEGAL_Z_PROBE) {
@@ -1647,11 +1653,13 @@ void Commands::processMCode(GCode *com) {
 #endif
             break;
         case 140: // M140 set bed temp
+#if HAVE_HEATED_BED        
             if(reportTempsensorError()) break;
             previousMillisCmd = HAL::timeInMilliseconds();
             if(Printer::debugDryrun()) break;
-            if (com->hasS()) Extruder::setHeatedBedTemperature(com->S + (com->hasO() ? com->O : 0),com->hasF() && com->F > 0);
+            if (com->hasS()) Extruder::setHeatedBedTemperature(com->S + (com->hasO() ? com->O : 0),com->hasF() && com->F > 0);            
             else if(com->hasH()) Extruder::setHeatedBedTemperature(heatedBedController.preheatTemperature + (com->hasO() ? com->O : 0),com->hasF() && com->F > 0);
+#endif            
             break;
         case 105: // M105  get temperature. Always returns the current temperature, doesn't wait until move stopped
             Com::writeToAll = false;
@@ -1677,7 +1685,6 @@ void Commands::processMCode(GCode *com) {
                 if(Printer::debugDryrun()) break;
                 UI_STATUS_UPD_F(Com::translatedF(UI_TEXT_HEATING_BED_ID));
                 Commands::waitUntilEndOfAllMoves();
-#if HAVE_HEATED_BED
                 if (com->hasS()) Extruder::setHeatedBedTemperature(com->S + (com->hasO() ? com->O : 0),com->hasF() && com->F > 0);
                 else if(com->hasH())  Extruder::setHeatedBedTemperature(heatedBedController.preheatTemperature + (com->hasO() ? com->O : 0),com->hasF() && com->F > 0);
 #if defined(SKIP_M190_IF_WITHIN) && SKIP_M190_IF_WITHIN > 0
@@ -1685,7 +1692,6 @@ void Commands::processMCode(GCode *com) {
 #endif
                 EVENT_WAITING_HEATER(-1);
                 tempController[HEATED_BED_INDEX]->waitForTargetTemperature();
-#endif
                 EVENT_HEATING_FINISHED(-1);
 #endif
                 UI_CLEAR_STATUS;

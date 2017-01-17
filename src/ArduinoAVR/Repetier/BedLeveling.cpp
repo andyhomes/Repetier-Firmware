@@ -490,7 +490,11 @@ void Printer::finishProbing() {
     float oldOffZ = Printer::offsetZ;
     GCode::executeFString(Com::tZProbeEndScript);
     if(Extruder::current) {
+#if DUAL_X_AXIS
+        Printer::offsetX = 0; // offsets are parking positions for dual x axis!
+#else        
         Printer::offsetX = -Extruder::current->xOffset * Printer::invAxisStepsPerMM[X_AXIS];
+#endif        
         Printer::offsetY = -Extruder::current->yOffset * Printer::invAxisStepsPerMM[Y_AXIS];
         Printer::offsetZ = -Extruder::current->zOffset * Printer::invAxisStepsPerMM[Z_AXIS];
     }
@@ -509,6 +513,7 @@ void Printer::finishProbing() {
 	float ZPOffsetX = 0;
 	float ZPOffsetY = 0;
 #endif		
+
     PrintLine::moveRelativeDistanceInSteps((xExtra - ZPOffsetX) * Printer::axisStepsPerMM[X_AXIS],
                                            (yExtra - ZPOffsetY) * Printer::axisStepsPerMM[Y_AXIS],
                                            (Printer::offsetZ - oldOffZ) * Printer::axisStepsPerMM[Z_AXIS], 0, EEPROM::zProbeXYSpeed(), true, ALWAYS_CHECK_ENDSTOPS);
@@ -560,11 +565,11 @@ float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript
         //PrintLine::moveRelativeDistanceInSteps(-offx,-offy,0,0,EEPROM::zProbeXYSpeed(),true,true);
         setZProbingActive(true);
         PrintLine::moveRelativeDistanceInSteps(0, 0, -probeDepth, 0, EEPROM::zProbeSpeed(), true, true);
+        setZProbingActive(false);
         if(stepsRemainingAtZHit < 0) {
             Com::printErrorFLN(Com::tZProbeFailed);
             return ILLEGAL_Z_PROBE;
         }
-        setZProbingActive(false);
 #if NONLINEAR_SYSTEM
         stepsRemainingAtZHit = realDeltaPositionSteps[C_TOWER] - currentNonlinearPositionSteps[C_TOWER]; // nonlinear moves may split z so stepsRemainingAtZHit is only what is left from last segment not total move. This corrects the problem.
 #endif
@@ -576,7 +581,7 @@ float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript
         currentNonlinearPositionSteps[Z_AXIS] += stepsRemainingAtZHit;
 #endif
         currentPositionSteps[Z_AXIS] += stepsRemainingAtZHit; // now current position is correct
-        sum += currentPositionSteps[Z_AXIS];
+        sum += lastCorrection - currentPositionSteps[Z_AXIS];
         if(r + 1 < repeat) {
             // go only shortest possible move up for repetitions
             PrintLine::moveRelativeDistanceInSteps(0, 0, shortMove, 0, HOMING_FEEDRATE_Z, true, true);
@@ -590,7 +595,7 @@ float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript
         GCode::executeFString(PSTR(Z_PROBE_RUN_AFTER_EVERY_PROBE));
 #endif
     }
-    float distance = static_cast<float>(sum) * invAxisStepsPerMM[Z_AXIS] / static_cast<float>(repeat);
+    float distance = static_cast<float>(sum) * invAxisStepsPerMM[Z_AXIS] / static_cast<float>(repeat) + EEPROM::zProbeHeight();
 	//Com::printFLN(PSTR("OrigDistance:"),distance);
 #if Z_PROBE_Z_OFFSET_MODE == 1
     distance += EEPROM::zProbeZOffset(); // We measured including coating, so we need to add coating thickness!
@@ -603,9 +608,7 @@ float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript
         distance += zCorr;
     }
 #endif
-#if SOFTWARE_LEVELING
     distance += bendingCorrectionAt(currentPosition[X_AXIS], currentPosition[Y_AXIS]);
-#endif
     Com::printF(Com::tZProbe, distance);
     Com::printF(Com::tSpaceXColon, realXPosition());
 #if DISTORTION_CORRECTION
@@ -635,13 +638,20 @@ float Printer::runZProbe(bool first,bool last,uint8_t repeat,bool runStartScript
  * Having printer's height set properly (i.e. after calibration of Z=0), one can use this procedure to measure Z-probe height.
  * It deploys the sensor, takes several probes at center, then updates Z-probe height with average.
  */
-void Printer::measureZProbeHeight() {
-	float zProbeHeight = Printer::runZProbe(true, true, Z_PROBE_REPETITIONS, true);
-#if EEPROM_MODE // Com::tZProbeHeight is not declared when EEPROM_MODE is 0
+void Printer::measureZProbeHeight(float curHeight) {
+#if FEATURE_Z_PROBE
+    currentPositionSteps[Z_AXIS] = curHeight * axisStepsPerMM[Z_AXIS];
+    updateCurrentPosition(true);
+    float startHeight = EEPROM::zProbeBedDistance() + (EEPROM::zProbeHeight() > 0 ? EEPROM::zProbeHeight() : 0);
+    moveTo(IGNORE_COORDINATE, IGNORE_COORDINATE, startHeight, IGNORE_COORDINATE, homingFeedrate[Z_AXIS]);
+    
+	float zProbeHeight = EEPROM::zProbeHeight() + startHeight - Printer::runZProbe(true, true, Z_PROBE_REPETITIONS, true);
+#if EEPROM_MODE != 0 // Com::tZProbeHeight is not declared when EEPROM_MODE is 0
 	Com::printFLN(Com::tZProbeHeight, zProbeHeight);
 	EEPROM::setZProbeHeight(zProbeHeight);
 #else
-	Com::printFLN(PSTR("Z-probe height [mm]"), zProbeHeight);
+	Com::printFLN(PSTR("Z-probe height [mm]:"), zProbeHeight);
+#endif
 #endif
 }
 
