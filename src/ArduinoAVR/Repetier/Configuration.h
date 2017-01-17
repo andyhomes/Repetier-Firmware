@@ -954,8 +954,8 @@ on this endstop.
 
 /** \brief Number of segments to generate for delta conversions per second of move
 */
-#define DELTA_SEGMENTS_PER_SECOND_PRINT 225 // Move accurate setting for print moves
-#define DELTA_SEGMENTS_PER_SECOND_MOVE 100 // Less accurate setting for other moves
+#define DELTA_SEGMENTS_PER_SECOND_PRINT 200 // Move accurate setting for print moves
+#define DELTA_SEGMENTS_PER_SECOND_MOVE 80 // Less accurate setting for other moves
 
 // Delta settings
 #if DRIVE_SYSTEM==DELTA
@@ -1056,7 +1056,7 @@ or 16 * (200 + (7*22=154) = 354) = 5664 bytes! !1
 min is 5 * (200 + (7*10=70) =270) = 1350
  This leaves ~1K free RAM on an Arduino which has only 8k
 Mega. Used only for nonlinear systems like delta or tuga. */
-#define DELTASEGMENTS_PER_PRINTLINE 22
+#define DELTASEGMENTS_PER_PRINTLINE 20
 
 /** After x seconds of inactivity, the stepper motors are disabled.
     Set to 0 to leave them enabled.
