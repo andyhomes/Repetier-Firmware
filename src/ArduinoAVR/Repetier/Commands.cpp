@@ -1114,14 +1114,14 @@ void Commands::processGCode(GCode *com) {
 #endif
 #endif
 
-#if FEATURE_DELTA_AUTO_CALIBRATION
+#if DELTA_CALIBRATION_ENABLED
     case 38: {
     	// G38 [R]		- correct height
     	// G38 (or G38 R0) - takes one probe at center then corrects height
     	// G38 Rn.m - takes 4 probes: one at center and three against each tower on distance n.m mm from center. Corrects height by average of the probes.
     	// G38 S[n] - measures z-probe Z offset. n - number of repetitions (default 3)
     	if (com->hasS()) {
-    		ZProbe::measureZProbeZOffset(com->S > 0 ? com->S : 3);
+    		ZProbe::measureZProbeHeight(com->S > 0 ? com->S : 3);
     	} else {
 			ZProbe::correctHeight(com->hasR() ? com->R : 0);
     	}
@@ -1129,7 +1129,7 @@ void Commands::processGCode(GCode *com) {
     break;
 #endif
 
-#if FEATURE_DELTA_AUTO_CALIBRATION
+#if DELTA_CALIBRATION_ENABLED
     case 39: {
     	// G39 	 [Rn.n] [In] [Sn]	- runs auto-calibration
     	// G39 P [Rn.n] [Sn]		- only takes probes

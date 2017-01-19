@@ -1,17 +1,15 @@
 #ifndef CALIBRATION_H_INCLUDED
 #define CALIBRATION_H_INCLUDED
+#endif
 
-#include "HAL.h"
+#define DELTA_CALIBRATION_ENABLED ((DRIVE_SYSTEM==DELTA) && FEATURE_Z_PROBE && 1)
+
+#if DELTA_CALIBRATION_ENABLED
 
 #define AUTOCALIBRATION_FINE_TILT_SEARCH true
 
 class Com1 {
 public:
-FSTRINGVAR(tAutocalibrationStarted)
-FSTRINGVAR(tAutocalibrationFinished)
-FSTRINGVAR(tNoCalibrationNeeded)
-FSTRINGVAR(tIteration)
-FSTRINGVAR(tOf)
 FSTRINGVAR(tPrinterHasTilt)
 FSTRINGVAR(tDirection)
 FSTRINGVAR(tAngle)
@@ -33,10 +31,7 @@ FSTRINGVAR(tTakingProbes)
 FSTRINGVAR(tInspectingForTilt)
 FSTRINGVAR(tFineTilt)
 FSTRINGVAR(tCorrectingOffsets)
-FSTRINGVAR(tBetterResultFound)
-FSTRINGVAR(tSuccess)
 FSTRINGVAR(tStoringBestResults)
-//FSTRINGVAR(t)
 };
 
 class AutoCalibration {
@@ -53,8 +48,8 @@ private:
 	float tilt_value;
 	float tilt_angle;
 
-	bool flatness_corrected;
-	bool tilt_correceted;
+//	bool flatness_corrected;
+//	bool tilt_correceted;
 	bool errors_corrected;
 
 	static float average(float arr[], int sz);
@@ -65,25 +60,14 @@ private:
 
 	inline float getDeviation() {if (deviation == .0) updateDeviation(); return deviation; };
 
-	void eliminateHeightError();
-
-	void eliminateFlatnessError();
+	void eliminateHeightAndFlatnessError();
 
 	void eliminateBedTilt();
 
 	void findTilt(int ang1, int ang2, int angStep, float val1, float val2, float valStep, float &ref_devsq);
 
-	void correctTilt();
 	void correctFlatnes();
 	void correctDeltaGeometry();
-
-	inline bool isDeltaGeometryCorrected() {
-		return errors_corrected;
-	}
-
-	inline bool isEverythingCorrected() {
-		return flatness_corrected && tilt_correceted && isDeltaGeometryCorrected();
-	}
 
 	void writeProbesOut();
 
@@ -100,11 +84,11 @@ class ZProbe {
 
 public:
 
-	static float runZProbe(bool first, bool last, uint8_t repeat, bool runStartScript);
+	static float runZProbe(bool first, bool last, uint8_t repeat = Z_PROBE_REPETITIONS, bool returnError = true);
 
 	static void correctHeight(float radius = 0.0);
 
-	static void measureZProbeZOffset(uint8_t repeats = 3);
+	static void measureZProbeHeight(uint8_t repeats = 3);
 };
 
-#endif
+#endif // DELTA_CALIBRATION_ENABLED

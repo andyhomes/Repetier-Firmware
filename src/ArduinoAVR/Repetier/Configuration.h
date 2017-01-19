@@ -1451,12 +1451,13 @@ to recalibrate z.
 #define Z_PROBE_MIN_TEMPERATURE 150
 
 /** This enables autocalibration functionality for DELTA machines. Z-probe is required. */
-#define FEATURE_DELTA_AUTO_CALIBRATION ((DRIVE_SYSTEM==DELTA) && FEATURE_Z_PROBE && 1)
+#define FEATURE_DELTA_CALIBRATION 1
+
 #define DELTA_CALIBRATION_RADIUS 90.0
 /** Must be greater than 0. Zero value causes infinite loop and other issues.*/
 #define DELTA_CALIBRATION_PRECISION 0.01
-/** Max tilt value that can be compensated with end-stops' offsets */
-#define DELTA_CALIBRATION_COMPENSABLE_TILT 1.0
+/** Max tilt value w/o tilt compensation been enabled  */
+#define TILT_COMPENSATION_VALUE_THRESHOLD 0.01
 #define DELTA_CALIBRATION_DEFAULT_MAX_ITERATIONS 5
 
 /*
