@@ -31,3 +31,8 @@ src/Repetier-Atmel7/*
 src/ArduinoDUE/Repetier.zip
 src/ArduinoAVR/Repetier.zip
 
+**/.settings
+**/Release
+.cproject
+.project
+.ino.cpp
